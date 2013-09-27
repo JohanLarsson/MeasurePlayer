@@ -20,15 +20,28 @@ namespace MeasurePlayer
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Vm _vm;
+
         public MainWindow()
         {
             InitializeComponent();
+            _vm = new Vm();
+            this.DataContext = _vm;
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void Play(object sender, RoutedEventArgs e)
         {
             MediaElement.Play();
         }
 
+        private void Pause(object sender, RoutedEventArgs e)
+        {
+            MediaElement.Pause();
+        }
+
+        private void Capture(object sender, RoutedEventArgs e)
+        {
+            _vm.Bookmarks.Add(new Bookmark(){Time = MediaElement.Position});
+        }
     }
 }

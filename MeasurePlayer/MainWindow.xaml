@@ -1,18 +1,30 @@
 ﻿<Window x:Class="MeasurePlayer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:measurePlayer="clr-namespace:MeasurePlayer"
-        Title="MainWindow" Height="350" Width="525">
+        xmlns:measurePlayer="clr-namespace:MeasurePlayer" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525"
+        d:DataContext="{d:DesignInstance measurePlayer:Vm, IsDesignTimeCreatable=False}">
+    <Window.Resources>
+        <measurePlayer:TimeSpanToMsConverter x:Key="TimeSpanToMsConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="358*"/>
             <ColumnDefinition Width="159*"/>
         </Grid.ColumnDefinitions>
         <MediaElement x:Name="MediaElement" Source="{Binding ElementName=VideoUrl, Path=Path, UpdateSourceTrigger=PropertyChanged}" 
-                      LoadedBehavior="Manual" UnloadedBehavior="Close"/>
+            LoadedBehavior="Manual" 
+            UnloadedBehavior="Close"/>
         <StackPanel Grid.Column="1">
             <measurePlayer:FileControl x:Name="VideoUrl" />
-            <Button Click="ButtonBase_OnClick">Play</Button>
+            <Button Click="Play">Play</Button>
+            <Button Click="Pause">Pause</Button>
+            <Button Click="Capture">Capture</Button>
+            <Slider Minimum="0" 
+                    Maximum="{Binding ElementName=MediaElement, Path=NaturalDuration.TimeSpan.TotalMilliseconds}" 
+                    Value="{Binding ElementName=MediaElement, Path=Position, Converter={StaticResource TimeSpanToMsConverter}}" />
+            <DataGrid ItemsSource="{Binding Bookmarks}" AutoGenerateColumns="True"/>
         </StackPanel>
     </Grid>
 </Window>
