@@ -44,21 +44,21 @@ namespace MeasurePlayer
             _vm.Bookmarks.Add(new Bookmark(){Time = MediaElement.Position});
         }
 
-        private void VideoClick(object sender, MouseButtonEventArgs e)
+        private void Forward(object sender, RoutedEventArgs e)
         {
-            if (e.ClickCount == 2)
-            {
-                _vm.Bookmarks.Add(new Bookmark() { Time = MediaElement.Position });
-            }
+            MediaElement.Position += TimeSpan.FromSeconds(1.0/25);
         }
 
-        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Back(object sender, RoutedEventArgs e)
         {
-            if(e.AddedItems.Count!=1)
-                return;
+            MediaElement.Position -= TimeSpan.FromSeconds(1.0 / 25);
+        }
 
-            var position =(Bookmark) e.AddedItems[0];
-            MediaElement.Position = position.Time;
+        private void VideoClick(object sender, MouseButtonEventArgs e)
+        {
+            if(e.ClickCount!=2)
+                return;
+            _vm.Bookmarks.Add(new Bookmark() { Time = MediaElement.Position });
         }
 
     }
