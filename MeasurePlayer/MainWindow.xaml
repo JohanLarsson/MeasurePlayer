@@ -13,22 +13,21 @@
             <ColumnDefinition Width="358*"/>
             <ColumnDefinition Width="159*"/>
         </Grid.ColumnDefinitions>
-        <MediaElement x:Name="MediaElement" Source="{Binding ElementName=VideoUrl, Path=Path, UpdateSourceTrigger=PropertyChanged}" 
-            LoadedBehavior="Manual" 
-            UnloadedBehavior="Close" MouseLeftButtonDown="VideoClick"/>
+        <MediaElement x:Name="MediaElement"
+            LoadedBehavior="Pause" 
+            UnloadedBehavior="Close" 
+            ScrubbingEnabled="True"          
+            MouseLeftButtonDown="VideoClick" MouseWheel="VideoWheel"/>
         <StackPanel Grid.Column="1">
-            <measurePlayer:FileControl x:Name="VideoUrl" />
-            <Button Click="Play">Play</Button>
-            <Button Click="Pause">Pause</Button>
-            <Button Click="Forward">Forward</Button>
-            <Button Click="Back">Back</Button>
-            <Button Click="Capture">Capture</Button>
-            <TextBlock Text="{Binding ElementName=MediaElement, Path=NaturalDuration.TimeSpan}"></TextBlock>
-            <TextBlock Text="{Binding ElementName=MediaElement, Path=Position}"></TextBlock>
+            <measurePlayer:FileControl x:Name="VideoUrl" Path="{Binding Path,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Command="{Binding Play}">Play</Button>
+            <Button Command="{Binding Pause}">Pause</Button>
+            <TextBlock Text="{Binding Clock.CurrentDuration}"></TextBlock>
+            <TextBlock Text="{Binding Clock.NaturalDuration.TimeSpan}"/>
             <Slider Minimum="0" 
-                    Maximum="{Binding ElementName=MediaElement, Path=NaturalDuration.TimeSpan.TotalMilliseconds}" 
+                    Maximum="{Binding Clock.NaturalDuration.TimeSpan}" 
                     Value="{Binding ElementName=MediaElement, Path=Position, Converter={StaticResource TimeSpanToMsConverter}}" />
-            <DataGrid ItemsSource="{Binding Bookmarks}" AutoGenerateColumns="True" SelectionChanged="Selector_OnSelectionChanged"/>
+            <DataGrid x:Name="Bookmarks" ItemsSource="{Binding Bookmarks}" AutoGenerateColumns="True" SelectionChanged="Selector_OnSelectionChanged"/>
         </StackPanel>
     </Grid>
 </Window>
