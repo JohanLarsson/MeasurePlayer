@@ -15,7 +15,7 @@
         </Grid.ColumnDefinitions>
         <MediaElement x:Name="MediaElement" Source="{Binding ElementName=VideoUrl, Path=Path, UpdateSourceTrigger=PropertyChanged}" 
             LoadedBehavior="Manual" 
-            UnloadedBehavior="Close"/>
+            UnloadedBehavior="Close" MouseLeftButtonDown="VideoClick"/>
         <StackPanel Grid.Column="1">
             <measurePlayer:FileControl x:Name="VideoUrl" />
             <Button Click="Play">Play</Button>

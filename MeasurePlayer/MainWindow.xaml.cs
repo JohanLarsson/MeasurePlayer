@@ -53,5 +53,13 @@ namespace MeasurePlayer
         {
             MediaElement.Position -= TimeSpan.FromSeconds(1.0 / 25);
         }
+
+        private void VideoClick(object sender, MouseButtonEventArgs e)
+        {
+            if(e.ClickCount!=2)
+                return;
+            _vm.Bookmarks.Add(new Bookmark() { Time = MediaElement.Position });
+        }
+
     }
 }
