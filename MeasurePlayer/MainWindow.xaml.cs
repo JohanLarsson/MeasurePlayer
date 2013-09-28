@@ -43,5 +43,15 @@ namespace MeasurePlayer
         {
             _vm.Bookmarks.Add(new Bookmark(){Time = MediaElement.Position});
         }
+
+        private void Forward(object sender, RoutedEventArgs e)
+        {
+            MediaElement.Position += TimeSpan.FromSeconds(1.0/25);
+        }
+
+        private void Back(object sender, RoutedEventArgs e)
+        {
+            MediaElement.Position -= TimeSpan.FromSeconds(1.0 / 25);
+        }
     }
 }

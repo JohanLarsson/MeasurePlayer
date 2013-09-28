@@ -20,7 +20,10 @@
             <measurePlayer:FileControl x:Name="VideoUrl" />
             <Button Click="Play">Play</Button>
             <Button Click="Pause">Pause</Button>
+            <Button Click="Forward">Forward</Button>
+            <Button Click="Back">Back</Button>
             <Button Click="Capture">Capture</Button>
+            <TextBlock Text="{Binding ElementName=MediaElement, Path=NaturalDuration.TimeSpan}"></TextBlock>
             <TextBlock Text="{Binding ElementName=MediaElement, Path=Position}"></TextBlock>
             <Slider Minimum="0" 
                     Maximum="{Binding ElementName=MediaElement, Path=NaturalDuration.TimeSpan.TotalMilliseconds}" 
