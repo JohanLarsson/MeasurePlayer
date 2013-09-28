@@ -32,22 +32,46 @@ namespace MeasurePlayer
 
         private void VideoClick(object sender, MouseButtonEventArgs e)
         {
-            if(e.ClickCount!=2)
+            if (e.ClickCount != 2)
                 return;
             _vm.Bookmarks.Add(new Bookmark() { Time = MediaElement.Position });
         }
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(Bookmarks.SelectedItems.Count!=1)
+            if (Bookmarks.SelectedItems.Count != 1)
                 return;
             _vm.Seek(((Bookmark)Bookmarks.SelectedItems[0]).Time);
         }
 
         private void VideoWheel(object sender, MouseWheelEventArgs e)
         {
-            _vm.Step(Math.Sign(e.Delta));
+            _vm.Step(Multiplier() * Math.Sign(e.Delta));
         }
 
+        private void SeekKey(object sender, KeyEventArgs e)
+        {
+            var multiplier = Multiplier();
+            if (e.Key == Key.Left)
+            {
+                _vm.CurrentFrame -= multiplier;
+            }
+            else if (e.Key == Key.Right)
+            {
+                _vm.CurrentFrame += multiplier;
+            }
+        }
+
+        private static int Multiplier()
+        {
+            int multiplier = 1;
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+                multiplier = 10;
+            if (Keyboard.Modifiers == ModifierKeys.Shift)
+                multiplier = 100;
+            if (Keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
+                multiplier = 1000;
+            return multiplier;
+        }
     }
 }

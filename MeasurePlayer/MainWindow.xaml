@@ -8,26 +8,37 @@
     <Window.Resources>
         <measurePlayer:TimeSpanToMsConverter x:Key="TimeSpanToMsConverter"/>
     </Window.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="358*"/>
-            <ColumnDefinition Width="159*"/>
-        </Grid.ColumnDefinitions>
-        <MediaElement x:Name="MediaElement"
+    <DockPanel>
+        <Menu IsMainMenu="True" DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <measurePlayer:FileControl x:Name="VideoUrl" Path="{Binding Path,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <MediaElement x:Name="MediaElement"
             LoadedBehavior="Pause" 
             UnloadedBehavior="Close" 
             ScrubbingEnabled="True"          
-            MouseLeftButtonDown="VideoClick" MouseWheel="VideoWheel"/>
-        <StackPanel Grid.Column="1">
-            <measurePlayer:FileControl x:Name="VideoUrl" Path="{Binding Path,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <Button Command="{Binding Play}">Play</Button>
-            <Button Command="{Binding Pause}">Pause</Button>
-            <!--<TextBlock Text="{Binding CurrentTime}"/>
-            <TextBlock Text="{Binding TotalTime}"/>-->
-            <Slider Minimum="0" 
+            MouseLeftButtonDown="VideoClick" MouseWheel="VideoWheel" PreviewKeyDown="SeekKey"/>
+            <StackPanel Grid.Column="0" VerticalAlignment="Bottom">
+                <Slider Minimum="0" 
                     Maximum="{Binding TotalFrames}" 
-                    Value="{Binding CurrentFrame}" />
-            <DataGrid x:Name="Bookmarks" ItemsSource="{Binding Bookmarks}" AutoGenerateColumns="True" SelectionChanged="Selector_OnSelectionChanged"/>
-        </StackPanel>
-    </Grid>
+                    Value="{Binding CurrentFrame}"
+                    PreviewKeyDown="SeekKey"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding Play}">Play</Button>
+                    <Button Command="{Binding Pause}">Pause</Button>
+                    <TextBlock Text="{Binding CurrentTime}"/>
+                    <TextBlock Text="{Binding TotalTime}"/>
+                </StackPanel>
+            </StackPanel>
+            <Expander Grid.Column="1" ExpandDirection="Left">
+                <DataGrid x:Name="Bookmarks"  ItemsSource="{Binding Bookmarks}" AutoGenerateColumns="True" SelectionChanged="Selector_OnSelectionChanged"/>
+            </Expander>
+        </Grid>
+    </DockPanel>
 </Window>

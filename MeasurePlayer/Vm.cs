@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using MeasurePlayer.Annotations;
+using Microsoft.WindowsAPICodePack.Shell;
 
 namespace MeasurePlayer
 {
@@ -23,7 +24,7 @@ namespace MeasurePlayer
         }
         private MediaTimeline _timeline = new MediaTimeline();
         private readonly MediaElement _mediaElement;
-        private double FrameRate { get { return 25; } }
+        public double FrameRate { get { return Info==null ?0: (double) Info.Properties.System.Video.FrameRate.Value/1000; } }
 
         public MediaClock Clock { get { return _mediaElement.Clock; } }
 
@@ -54,12 +55,27 @@ namespace MeasurePlayer
             get { return (int)Math.Round(FrameRate * CurrentTime.TotalSeconds, 0); }
             set
             {
+                if (value < 0)
+                    value = 0;
+                if (value > TotalFrames)
+                    value = TotalFrames;
                 Seek(TimeSpan.FromSeconds(value/FrameRate));
                 OnPropertyChanged();
             }
         }
 
-        public TimeSpan TotalTime { get { return (Clock !=null)? Clock.NaturalDuration.TimeSpan:TimeSpan.Zero; } }
+        private TimeSpan _totalTime;
+        public TimeSpan TotalTime
+        {
+            get { return _totalTime; }
+            set
+            {
+                if (value.Equals(_totalTime)) return;
+                _totalTime = value;
+                OnPropertyChanged();
+                OnPropertyChanged("TotalFrames");
+            }
+        }
 
         public int TotalFrames { get { return (int)Math.Round(FrameRate * TotalTime.TotalSeconds, 0); } }
 
@@ -89,18 +105,38 @@ namespace MeasurePlayer
                     : null;
                 if (Clock != null)
                 {
-                    Controller.Pause();
+                    Clock.CurrentStateInvalidated += (sender, args) =>
+                    {
+                       TotalTime = (Clock != null) ? Clock.NaturalDuration.TimeSpan : TimeSpan.Zero;
+                    };
                     Clock.CurrentTimeInvalidated += (sender, args) =>
                     {
                         OnPropertyChanged("CurrentTime");
                         OnPropertyChanged("CurrentFrame");
                     };
+                    Controller.Begin();
+                    Controller.Pause();
                 }
+                else
+                {
+                    TotalTime = TimeSpan.Zero;
+                }
+                Info = ShellFile.FromFilePath(_path);
 
                 OnPropertyChanged();
                 OnPropertyChanged("Clock");
-                OnPropertyChanged("TotalTime");
-                OnPropertyChanged("TotalFrames");
+            }
+        }
+
+        private ShellFile _info;
+        public ShellFile Info
+        {
+            get { return _info; }
+            set
+            {
+                if (Equals(value, _info)) return;
+                _info = value;
+                OnPropertyChanged();
             }
         }
 
