@@ -15,16 +15,17 @@
         </Grid.ColumnDefinitions>
         <MediaElement x:Name="MediaElement" Source="{Binding ElementName=VideoUrl, Path=Path, UpdateSourceTrigger=PropertyChanged}" 
             LoadedBehavior="Manual" 
-            UnloadedBehavior="Close"/>
+            UnloadedBehavior="Close" MouseLeftButtonDown="VideoClick"/>
         <StackPanel Grid.Column="1">
             <measurePlayer:FileControl x:Name="VideoUrl" />
             <Button Click="Play">Play</Button>
             <Button Click="Pause">Pause</Button>
             <Button Click="Capture">Capture</Button>
+            <TextBlock Text="{Binding ElementName=MediaElement, Path=Position}"></TextBlock>
             <Slider Minimum="0" 
                     Maximum="{Binding ElementName=MediaElement, Path=NaturalDuration.TimeSpan.TotalMilliseconds}" 
                     Value="{Binding ElementName=MediaElement, Path=Position, Converter={StaticResource TimeSpanToMsConverter}}" />
-            <DataGrid ItemsSource="{Binding Bookmarks}" AutoGenerateColumns="True"/>
+            <DataGrid ItemsSource="{Binding Bookmarks}" AutoGenerateColumns="True" SelectionChanged="Selector_OnSelectionChanged"/>
         </StackPanel>
     </Grid>
 </Window>

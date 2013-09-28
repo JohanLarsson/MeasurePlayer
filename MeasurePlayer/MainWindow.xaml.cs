@@ -43,5 +43,23 @@ namespace MeasurePlayer
         {
             _vm.Bookmarks.Add(new Bookmark(){Time = MediaElement.Position});
         }
+
+        private void VideoClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                _vm.Bookmarks.Add(new Bookmark() { Time = MediaElement.Position });
+            }
+        }
+
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(e.AddedItems.Count!=1)
+                return;
+
+            var position =(Bookmark) e.AddedItems[0];
+            MediaElement.Position = position.Time;
+        }
+
     }
 }
