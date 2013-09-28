@@ -44,16 +44,32 @@ namespace MeasurePlayer
         private ICommand _stop;
         public ICommand Stop
         {
-            get { return _stop ?? (_stop = new RelayCommand(o => Controller.Pause(), o => Clock != null && !_mediaElement.Clock.IsPaused)); }
+            get { return _stop ?? (_stop = new RelayCommand(o => Controller.Stop(), o => Clock != null && !_mediaElement.Clock.IsPaused)); }
         }
+
+        public TimeSpan CurrentTime { get { return (Clock !=null)? Clock.CurrentTime.Value:TimeSpan.Zero; } }
+
+        public int CurrentFrame
+        {
+            get { return (int)Math.Round(FrameRate * CurrentTime.TotalSeconds, 0); }
+            set
+            {
+                Seek(TimeSpan.FromSeconds(value/FrameRate));
+                OnPropertyChanged();
+            }
+        }
+
+        public TimeSpan TotalTime { get { return (Clock !=null)? Clock.NaturalDuration.TimeSpan:TimeSpan.Zero; } }
+
+        public int TotalFrames { get { return (int)Math.Round(FrameRate * TotalTime.TotalSeconds, 0); } }
 
         public void Seek(TimeSpan timeSpan)
         {
-            if (Clock == null ||timeSpan<TimeSpan.Zero || timeSpan>Clock.NaturalDuration.TimeSpan)
+            if (Clock == null || timeSpan < TimeSpan.Zero || timeSpan > Clock.NaturalDuration.TimeSpan)
                 return;
-            Controller.Seek(timeSpan,TimeSeekOrigin.BeginTime);
+            Controller.Seek(timeSpan, TimeSeekOrigin.BeginTime);
         }
-        
+
         public void Step(int frames)
         {
             Seek(TimeSpan.FromSeconds(frames / FrameRate + Clock.CurrentTime.Value.TotalSeconds));
@@ -74,10 +90,17 @@ namespace MeasurePlayer
                 if (Clock != null)
                 {
                     Controller.Pause();
+                    Clock.CurrentTimeInvalidated += (sender, args) =>
+                    {
+                        OnPropertyChanged("CurrentTime");
+                        OnPropertyChanged("CurrentFrame");
+                    };
                 }
 
                 OnPropertyChanged();
                 OnPropertyChanged("Clock");
+                OnPropertyChanged("TotalTime");
+                OnPropertyChanged("TotalFrames");
             }
         }
 

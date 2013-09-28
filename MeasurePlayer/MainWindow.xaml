@@ -22,11 +22,11 @@
             <measurePlayer:FileControl x:Name="VideoUrl" Path="{Binding Path,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Button Command="{Binding Play}">Play</Button>
             <Button Command="{Binding Pause}">Pause</Button>
-            <TextBlock Text="{Binding Clock.CurrentDuration}"></TextBlock>
-            <TextBlock Text="{Binding Clock.NaturalDuration.TimeSpan}"/>
+            <!--<TextBlock Text="{Binding CurrentTime}"/>
+            <TextBlock Text="{Binding TotalTime}"/>-->
             <Slider Minimum="0" 
-                    Maximum="{Binding Clock.NaturalDuration.TimeSpan}" 
-                    Value="{Binding ElementName=MediaElement, Path=Position, Converter={StaticResource TimeSpanToMsConverter}}" />
+                    Maximum="{Binding TotalFrames}" 
+                    Value="{Binding CurrentFrame}" />
             <DataGrid x:Name="Bookmarks" ItemsSource="{Binding Bookmarks}" AutoGenerateColumns="True" SelectionChanged="Selector_OnSelectionChanged"/>
         </StackPanel>
     </Grid>
