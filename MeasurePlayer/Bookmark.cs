@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 using MeasurePlayer.Annotations;
 
 namespace MeasurePlayer
@@ -18,7 +19,9 @@ namespace MeasurePlayer
                 OnPropertyChanged();
             }
         }
+
         private TimeSpan _time;
+        [XmlIgnore]
         public TimeSpan Time
         {
             get { return _time; }
@@ -29,6 +32,15 @@ namespace MeasurePlayer
                 OnPropertyChanged();
             }
         }
+
+        // Pretend property for serialization
+        [XmlElement("Time"), Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public long Ticks
+        {
+            get { return _time.Ticks; }
+            set { _time = new TimeSpan(value); }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

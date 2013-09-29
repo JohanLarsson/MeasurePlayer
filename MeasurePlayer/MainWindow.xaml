@@ -37,7 +37,15 @@
                 </StackPanel>
             </StackPanel>
             <Expander x:Name="BookmarksExpander" Grid.Column="1" ExpandDirection="Left">
-                <DataGrid x:Name="Bookmarks"  ItemsSource="{Binding Bookmarks}" AutoGenerateColumns="True" SelectionChanged="Selector_OnSelectionChanged"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid x:Name="Bookmarks"  ItemsSource="{Binding Bookmarks}" AutoGenerateColumns="True" SelectionChanged="Selector_OnSelectionChanged" CanUserAddRows="False"/>
+                    <Button Command="{Binding SaveBookmarksCmd}" Grid.Row="1">Save</Button>
+                </Grid>
+
             </Expander>
         </Grid>
     </DockPanel>

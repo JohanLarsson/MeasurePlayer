@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -21,7 +22,25 @@ namespace MeasurePlayer
         public Vm(MediaElement mediaElement)
         {
             _mediaElement = mediaElement;
+            Bookmarks.CollectionChanged += (sender, e) =>
+            {
+                if (e.OldItems != null)
+                {
+                    foreach (INotifyPropertyChanged item in e.OldItems)
+                        item.PropertyChanged -= SetDirty;
+                }
+                if (e.NewItems != null)
+                    foreach (INotifyPropertyChanged item in e.NewItems)
+                        item.PropertyChanged += SetDirty;
+                IsBookmarksDirty = true;
+            };
         }
+
+        private void SetDirty(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            IsBookmarksDirty = true;
+        }
+
         private MediaTimeline _timeline = new MediaTimeline();
         private readonly MediaElement _mediaElement;
         public double FrameRate { get { return Info==null ?0: (double) Info.Properties.System.Video.FrameRate.Value/1000; } }
@@ -67,6 +86,30 @@ namespace MeasurePlayer
         {
             get { return _stop ?? (_stop = new RelayCommand(o => Controller.Stop(), o => Clock != null && !_mediaElement.Clock.IsPaused)); }
         }
+
+        private ICommand _saveBookmarksCmd;
+        public ICommand SaveBookmarksCmd
+        {
+            get { return _saveBookmarksCmd ?? (_saveBookmarksCmd = new RelayCommand(o => SaveBookmarks(), o => IsBookmarksDirty)); }
+        }
+
+        private void SaveBookmarks()
+        {
+            BookmarksFile.SaveAsync(BookmarkFileName, Bookmarks);
+            IsBookmarksDirty = false;
+        }
+
+        private string BookmarkFileName
+        {
+            get
+            {
+                var directory = System.IO.Path.GetDirectoryName(Path);
+                var fileNameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(Path);
+                return System.IO.Path.Combine(directory, fileNameWithoutExtension + ".bookmarks.xml");
+            }
+        }
+
+        public bool IsBookmarksDirty { get; set; }
 
         public bool IsPlaying{get { return Clock != null && !_mediaElement.Clock.IsPaused; }}
 
@@ -120,7 +163,22 @@ namespace MeasurePlayer
             set
             {
                 if (value == _path) return;
+
+                if (AskBeforeSaveBookmarks() == MessageBoxResult.Cancel)
+                {
+                    OnPropertyChanged();
+                    return;
+                } 
+
+
                 _path = value;
+                Bookmarks.Clear();
+                var bookmarksFile = BookmarksFile.Load(BookmarkFileName);
+                foreach (var bookmark in bookmarksFile.Bookmarks)
+                {
+                    Bookmarks.Add(bookmark);
+                }
+                IsBookmarksDirty = false;
                 _timeline.Source = new Uri(Path);
                 _mediaElement.Clock = _timeline.Source != null
                     ? _timeline.CreateClock()
@@ -148,6 +206,25 @@ namespace MeasurePlayer
                 OnPropertyChanged();
                 OnPropertyChanged("Clock");
             }
+        }
+
+        private MessageBoxResult AskBeforeSaveBookmarks()
+        {
+            if (IsBookmarksDirty)
+            {
+                var result = MessageBox.Show("Do you want to save bookmarks?", "Save bookmarks", MessageBoxButton.YesNoCancel);
+                if (result == MessageBoxResult.Cancel)
+                {
+
+                    return result;
+                }
+                if (result == MessageBoxResult.Yes)
+                {
+                    BookmarksFile.SaveAsync(BookmarkFileName, Bookmarks);
+                }
+                return result;
+            }
+            return MessageBoxResult.No;
         }
 
         private ShellFile _info;
