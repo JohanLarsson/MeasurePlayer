@@ -315,9 +315,13 @@ namespace MeasurePlayer
         {
             var bookmark = Bookmarks.FirstOrDefault(x => x.Time > CurrentTime);
             if (bookmark == null)
-                Bookmarks.Add(new Bookmark() { Time = CurrentTime });
-            var indexOf = Bookmarks.IndexOf(bookmark);
-            Bookmarks.Insert(indexOf, new Bookmark() { Time = CurrentTime });
+                Bookmarks.Add(new Bookmark() {Time = CurrentTime});
+            else
+            {
+                var indexOf = Bookmarks.IndexOf(bookmark);
+                Bookmarks.Insert(indexOf, new Bookmark() { Time = CurrentTime });
+            }
+
         }
     }
 }
