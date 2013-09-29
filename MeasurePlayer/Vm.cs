@@ -22,6 +22,7 @@ namespace MeasurePlayer
         public Vm(MediaElement mediaElement)
         {
             _mediaElement = mediaElement;
+            _mediaElement.MediaFailed+= MediaElementOnMediaFailed;
             Bookmarks.CollectionChanged += (sender, e) =>
             {
                 if (e.OldItems != null)
@@ -34,6 +35,11 @@ namespace MeasurePlayer
                         item.PropertyChanged += SetDirty;
                 IsBookmarksDirty = true;
             };
+        }
+
+        private void MediaElementOnMediaFailed(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
+        {
+            throw new NotImplementedException();
         }
 
         private void SetDirty(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -57,7 +63,11 @@ namespace MeasurePlayer
 
         public void Play()
         {
-            Controller.Resume();
+            if (!IsPlaying)
+            {
+                Controller.Resume();
+                OnPropertyChanged("IsPlaying");
+            }
         }
 
         private ICommand _pauseCmd;
@@ -69,8 +79,12 @@ namespace MeasurePlayer
 
         public void Pause()
         {
-            if(IsPlaying)
+            if (IsPlaying)
+            {
                 Controller.Pause();
+                OnPropertyChanged("IsPlaying");
+            }
+
         }
 
         public void TogglePlayPause()
