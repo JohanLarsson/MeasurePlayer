@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:measurePlayer="clr-namespace:MeasurePlayer" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525"
+        Title="MainWindow" Height="350" Width="525" PreviewKeyDown="VideoKey" Loaded="MainWindow_OnLoaded"
         d:DataContext="{d:DesignInstance measurePlayer:Vm, IsDesignTimeCreatable=False}">
     <Window.Resources>
         <measurePlayer:TimeSpanToMsConverter x:Key="TimeSpanToMsConverter"/>
     </Window.Resources>
     <DockPanel>
-        <Menu IsMainMenu="True" DockPanel.Dock="Top">
+        <Menu x:Name="MainMenu" IsMainMenu="True" DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <measurePlayer:FileControl x:Name="VideoUrl" Path="{Binding Path,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </MenuItem>
@@ -23,20 +23,20 @@
             LoadedBehavior="Pause" 
             UnloadedBehavior="Close" 
             ScrubbingEnabled="True"          
-            MouseLeftButtonDown="VideoClick" MouseWheel="VideoWheel" PreviewKeyDown="SeekKey"/>
+            MouseLeftButtonDown="VideoClick" MouseWheel="VideoWheel" PreviewKeyDown="VideoKey"/>
             <StackPanel Grid.Column="0" VerticalAlignment="Bottom">
                 <Slider Minimum="0" 
                     Maximum="{Binding TotalFrames}" 
                     Value="{Binding CurrentFrame}"
-                    PreviewKeyDown="SeekKey"/>
+                    PreviewKeyDown="VideoKey"/>
                 <StackPanel Orientation="Horizontal">
-                    <Button Command="{Binding Play}">Play</Button>
-                    <Button Command="{Binding Pause}">Pause</Button>
+                    <Button Command="{Binding PlayCmd}">Play</Button>
+                    <Button Command="{Binding PauseCmd}">Pause</Button>
                     <TextBlock Text="{Binding CurrentTime}"/>
                     <TextBlock Text="{Binding TotalTime}"/>
                 </StackPanel>
             </StackPanel>
-            <Expander Grid.Column="1" ExpandDirection="Left">
+            <Expander x:Name="BookmarksExpander" Grid.Column="1" ExpandDirection="Left">
                 <DataGrid x:Name="Bookmarks"  ItemsSource="{Binding Bookmarks}" AutoGenerateColumns="True" SelectionChanged="Selector_OnSelectionChanged"/>
             </Expander>
         </Grid>

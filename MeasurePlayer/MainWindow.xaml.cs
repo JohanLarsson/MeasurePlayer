@@ -32,6 +32,11 @@ namespace MeasurePlayer
 
         private void VideoClick(object sender, MouseButtonEventArgs e)
         {
+            if (e.ClickCount == 1)
+            {
+                if(_vm.IsPlaying)
+                    _vm.Pause();
+            }
             if (e.ClickCount != 2)
                 return;
             _vm.Bookmarks.Add(new Bookmark() { Time = MediaElement.Position });
@@ -49,8 +54,20 @@ namespace MeasurePlayer
             _vm.Step(Multiplier() * Math.Sign(e.Delta));
         }
 
-        private void SeekKey(object sender, KeyEventArgs e)
+        private void VideoKey(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                ToggleFullScreen();
+            }
+            if (e.Key == Key.F11)
+            {
+                ToggleFullScreen();
+            }
+            if (e.Key == Key.Space)
+            {
+                _vm.TogglePlayPause();
+            }
             var multiplier = Multiplier();
             if (e.Key == Key.Left)
             {
@@ -59,6 +76,26 @@ namespace MeasurePlayer
             else if (e.Key == Key.Right)
             {
                 _vm.CurrentFrame += multiplier;
+            }
+        }
+
+
+
+        private void ToggleFullScreen()
+        {
+            if (this.WindowStyle == WindowStyle.SingleBorderWindow)
+            {
+                BookmarksExpander.Visibility = Visibility.Collapsed;
+                MainMenu.Visibility = Visibility.Collapsed;
+                this.WindowStyle = WindowStyle.None;
+                this.WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                BookmarksExpander.Visibility = Visibility.Visible;
+                MainMenu.Visibility = Visibility.Visible;
+                this.WindowStyle = WindowStyle.SingleBorderWindow;
+                this.WindowState = WindowState.Normal;
             }
         }
 
@@ -73,5 +110,11 @@ namespace MeasurePlayer
                 multiplier = 1000;
             return multiplier;
         }
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            this.Focus();
+        }
+
     }
 }

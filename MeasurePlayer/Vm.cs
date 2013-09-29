@@ -30,16 +30,36 @@ namespace MeasurePlayer
 
         private ClockController Controller { get { return Clock.Controller; } }
 
-        private ICommand _play;
-        public ICommand Play
+        private ICommand _playCmd;
+        public ICommand PlayCmd
         {
-            get { return _play ?? (_play = new RelayCommand(o => Controller.Resume(), o => Clock != null && _mediaElement.Clock.IsPaused)); }
+            get { return _playCmd ?? (_playCmd = new RelayCommand(o => Play(), o => !IsPlaying)); }
         }
 
-        private ICommand _pause;
-        public ICommand Pause
+        public void Play()
         {
-            get { return _pause ?? (_pause = new RelayCommand(o => Controller.Pause(), o => Clock != null && !_mediaElement.Clock.IsPaused)); }
+            Controller.Resume();
+        }
+
+        private ICommand _pauseCmd;
+        public ICommand PauseCmd
+        {
+            get { return _pauseCmd ?? (_pauseCmd = new RelayCommand(o => Pause(), o => this.IsPlaying)); }
+        }
+
+
+        public void Pause()
+        {
+            if(IsPlaying)
+                Controller.Pause();
+        }
+
+        public void TogglePlayPause()
+        {
+            if (IsPlaying)
+                Pause();
+            else
+                Play();
         }
 
         private ICommand _stop;
@@ -47,6 +67,8 @@ namespace MeasurePlayer
         {
             get { return _stop ?? (_stop = new RelayCommand(o => Controller.Stop(), o => Clock != null && !_mediaElement.Clock.IsPaused)); }
         }
+
+        public bool IsPlaying{get { return Clock != null && !_mediaElement.Clock.IsPaused; }}
 
         public TimeSpan CurrentTime { get { return (Clock !=null)? Clock.CurrentTime.Value:TimeSpan.Zero; } }
 
