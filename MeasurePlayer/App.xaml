@@ -17,7 +17,7 @@
                     <Setter.Value>
                         <ControlTemplate>
                             <Grid>
-                                <Ellipse Height="20" Width="20" Fill="Transparent"/>
+                                <Ellipse Fill="Transparent"/>
                                 <Path x:Name="IconPath" Data="{StaticResource PlayGeometry}" Fill="{TemplateBinding Background}" Stroke="{TemplateBinding Foreground}" StrokeThickness="2"></Path>
                             </Grid>
 
