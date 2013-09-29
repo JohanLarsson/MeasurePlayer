@@ -11,9 +11,37 @@
         d:DataContext="{d:DesignInstance measurePlayer:Vm, IsDesignTimeCreatable=False}">
     <Page.Resources>
         <measurePlayer:TimeSpanToMsConverter x:Key="TimeSpanToMsConverter"/>
+        <StreamGeometry x:Key="PlayGeometry">
+            M14.8,11.4 L30,18.991667 C30.8,19.333333 30.8,20.566667 30,20.991667 L14.22,28.89 C13.2,29.433333 12,29.2 12,27.65 L12,12.85 C12,10.8 13.2,10.4 14.8,11.4 z M20,5 C12,5 5,12 5,20 5,28 12,35 20,35 28,35 35,28 35,20 35,12 28,5 20,5 z M20,0 C31,0 40,9 40,20 40,31 31,40 20,40 9,40 0,31 0,20 0,9 9,0 20,0 z
+        </StreamGeometry>
+        <StreamGeometry x:Key="PauseGeometry">
+            M25,11 C26,11 27,12 27,13 L27,27 C27,28 26,29 25,29 24,29 23,28 23,27 L23,13 C23,12 24,11 25,11 z M15,11 C16,11 17,12 17,13 L17,27 C17,28 16,29 15,29 14,29 13,28 13,27 L13,13 C13,12 14,11 15,11 z M20,5 C12,5 5,12 5,20 5,28 12,35 20,35 28,35 35,28 35,20 35,12 28,5 20,5 z M20,0 C31,0 40,9 40,20 40,31 31,40 20,40 9,40 0,31 0,20 0,9 9,0 20,0 z
+        </StreamGeometry>
+        <Style x:Key="PlayPauseButton" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid>
+                            <Ellipse Height="20" Width="20" Fill="Transparent"/>
+                            <Path x:Name="IconPath" Data="{StaticResource PlayGeometry}" Fill="{TemplateBinding Background}" Stroke="{TemplateBinding Foreground}" StrokeThickness="2"></Path>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                <Setter Property="Data" TargetName="IconPath" Value ="{StaticResource PauseGeometry}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
     <DockPanel>
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
@@ -22,26 +50,29 @@
             LoadedBehavior="Pause" 
             UnloadedBehavior="Close" 
             ScrubbingEnabled="True"  
-                          MouseLeftButtonDown="VideoClick" MouseWheel="VideoWheel"
+                          MouseLeftButtonDown="VideoClick" MouseWheel="VideoWheel" Grid.RowSpan="2"
              />
-            <StackPanel Grid.Column="0" VerticalAlignment="Bottom" PreviewKeyDown="VideoKey" >
-                <Slider Minimum="0" 
+
+            <Grid Grid.Column="0" VerticalAlignment="Bottom" PreviewKeyDown="VideoKey" Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ToggleButton Grid.Row="0" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Command="{Binding TogglePlayPauseCmd}" HorizontalAlignment="Center" Style="{StaticResource PlayPauseButton}"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                    <TextBlock Text="{Binding CurrentTime}"/>
+                    <TextBlock Text="{Binding TotalTime, StringFormat='/({0}) '}"/>
+                </StackPanel>
+                <Slider Minimum="0" Grid.Row="1"
                     Maximum="{Binding TotalFrames}" 
                     Value="{Binding CurrentFrame}"
                     PreviewKeyDown="VideoKey"/>
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding CurrentTime}"/>
-                        <TextBlock Text="{Binding TotalTime, StringFormat='/({0}) '}"/>
-                    </StackPanel>
 
-                    <Button Command="{Binding PlayCmd}">Play</Button>
-                    <Button Command="{Binding PauseCmd}">Pause</Button>
-
-                </StackPanel>
-                <measurePlayer:FileControl x:Name="VideoUrl" Path="{Binding Path,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-            <Expander x:Name="BookmarksExpander" Grid.Column="1" ExpandDirection="Left">
+            </Grid>
+            <measurePlayer:FileControl x:Name="VideoUrl" Path="{Binding Path,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                       Grid.Row="1" Grid.Column="0" />
+            <Expander x:Name="BookmarksExpander" Grid.Column="1" ExpandDirection="Left" Grid.Row="0" Grid.RowSpan="2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>

@@ -21,8 +21,9 @@ namespace MeasurePlayer
     {
         public Vm(MediaElement mediaElement)
         {
+            _path = "Browse for a file";
             _mediaElement = mediaElement;
-            _mediaElement.MediaFailed+= MediaElementOnMediaFailed;
+            _mediaElement.MediaFailed += MediaElementOnMediaFailed;
             Bookmarks.CollectionChanged += (sender, e) =>
             {
                 if (e.OldItems != null)
@@ -39,7 +40,7 @@ namespace MeasurePlayer
 
         private void MediaElementOnMediaFailed(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("Media failed");
         }
 
         private void SetDirty(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -49,7 +50,7 @@ namespace MeasurePlayer
 
         private MediaTimeline _timeline = new MediaTimeline();
         private readonly MediaElement _mediaElement;
-        public double FrameRate { get { return Info==null ?0: (double) Info.Properties.System.Video.FrameRate.Value/1000; } }
+        public double FrameRate { get { return Info == null ? 0 : (double)Info.Properties.System.Video.FrameRate.Value / 1000; } }
 
         public MediaClock Clock { get { return _mediaElement.Clock; } }
 
@@ -76,6 +77,11 @@ namespace MeasurePlayer
             get { return _pauseCmd ?? (_pauseCmd = new RelayCommand(o => Pause(), o => this.IsPlaying)); }
         }
 
+        private ICommand _togglePlayPauseCmd;
+        public ICommand TogglePlayPauseCmd
+        {
+            get { return _togglePlayPauseCmd ?? (_togglePlayPauseCmd = new RelayCommand(o => TogglePlayPause(), o => Clock!=null)); }
+        }
 
         public void Pause()
         {
@@ -84,7 +90,6 @@ namespace MeasurePlayer
                 Controller.Pause();
                 OnPropertyChanged("IsPlaying");
             }
-
         }
 
         public void TogglePlayPause()
@@ -125,9 +130,19 @@ namespace MeasurePlayer
 
         public bool IsBookmarksDirty { get; set; }
 
-        public bool IsPlaying{get { return Clock != null && !_mediaElement.Clock.IsPaused; }}
+        public bool IsPlaying
+        {
+            get
+            {
+                return Clock != null && !_mediaElement.Clock.IsPaused;
+            }
+            set
+            {
+                TogglePlayPause();
+            }
+        }
 
-        public TimeSpan CurrentTime { get { return (Clock !=null)? Clock.CurrentTime.Value:TimeSpan.Zero; } }
+        public TimeSpan CurrentTime { get { return (Clock != null) ? Clock.CurrentTime.Value : TimeSpan.Zero; } }
 
         public int CurrentFrame
         {
@@ -138,7 +153,7 @@ namespace MeasurePlayer
                     value = 0;
                 if (value > TotalFrames)
                     value = TotalFrames;
-                Seek(TimeSpan.FromSeconds(value/FrameRate));
+                Seek(TimeSpan.FromSeconds(value / FrameRate));
                 OnPropertyChanged();
             }
         }
@@ -182,7 +197,7 @@ namespace MeasurePlayer
                 {
                     OnPropertyChanged();
                     return;
-                } 
+                }
 
 
                 _path = value;
@@ -201,7 +216,7 @@ namespace MeasurePlayer
                 {
                     Clock.CurrentStateInvalidated += (sender, args) =>
                     {
-                       TotalTime = (Clock != null) ? Clock.NaturalDuration.TimeSpan : TimeSpan.Zero;
+                        TotalTime = (Clock != null) ? Clock.NaturalDuration.TimeSpan : TimeSpan.Zero;
                     };
                     Clock.CurrentTimeInvalidated += (sender, args) =>
                     {
@@ -280,6 +295,7 @@ namespace MeasurePlayer
         public double Length { get; set; }
 
         private ObservableCollection<Bookmark> _bookmarks;
+        //private ObservableCollection<Bookmark> _innerBookMarks = new ObservableCollection<Bookmark>();
         public ObservableCollection<Bookmark> Bookmarks
         {
             get { return _bookmarks ?? (_bookmarks = new ObservableCollection<Bookmark>()); }
@@ -295,6 +311,13 @@ namespace MeasurePlayer
         }
 
 
-
+        public void AddBookmark()
+        {
+            var bookmark = Bookmarks.FirstOrDefault(x => x.Time > CurrentTime);
+            if (bookmark == null)
+                Bookmarks.Add(new Bookmark() { Time = CurrentTime });
+            var indexOf = Bookmarks.IndexOf(bookmark);
+            Bookmarks.Insert(indexOf, new Bookmark() { Time = CurrentTime });
+        }
     }
 }

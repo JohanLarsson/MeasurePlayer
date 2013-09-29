@@ -32,14 +32,14 @@ namespace MeasurePlayer
 
         private void VideoClick(object sender, MouseButtonEventArgs e)
         {
-            if (e.ClickCount == 1)
-            {
-                if (_vm.IsPlaying)
-                    _vm.Pause();
-            }
+            //if (e.ClickCount == 1)
+            //{
+            //    if (_vm.IsPlaying)
+            //        _vm.Pause();
+            //}
             if (e.ClickCount != 2)
                 return;
-            _vm.Bookmarks.Add(new Bookmark() { Time = MediaElement.Position });
+            _vm.AddBookmark();
         }
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -71,10 +71,6 @@ namespace MeasurePlayer
                 _vm.CurrentFrame += multiplier;
             }
         }
-
-
-
-
 
         private static int Multiplier()
         {
