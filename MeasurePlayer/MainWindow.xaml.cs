@@ -46,11 +46,7 @@ namespace MeasurePlayer
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-            var selected = new List<Bookmark>();
-            foreach (var selectedItem in Bookmarks.SelectedItems)
-            {
-                selected.Add((Bookmark) selectedItem);
-            }
+            var selected = Bookmarks.SelectedItems.Cast<Bookmark>().ToList();
             _vm.SelectedBookmarks = selected;
             if (Bookmarks.SelectedItems.Count != 1)
                 return;
