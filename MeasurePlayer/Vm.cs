@@ -301,6 +301,29 @@ namespace MeasurePlayer
             get { return _bookmarks ?? (_bookmarks = new ObservableCollection<Bookmark>()); }
         }
 
+        private List<Bookmark> _selectedBookmarks;
+        public List<Bookmark> SelectedBookmarks
+        {
+            get { return _selectedBookmarks; }
+            set
+            {
+                if (Equals(value, _selectedBookmarks)) return;
+                _selectedBookmarks = value;
+                OnPropertyChanged();
+                OnPropertyChanged("Diff");
+            }
+        }
+
+        public TimeSpan Diff
+        {
+            get
+            {
+                if(SelectedBookmarks==null ||SelectedBookmarks.Count<2)
+                    return TimeSpan.Zero;
+                return SelectedBookmarks.Max(x => x.Time) - SelectedBookmarks.Min(x => x.Time);
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
