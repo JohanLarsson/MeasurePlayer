@@ -4,13 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:measurePlayer="clr-namespace:MeasurePlayer"
-        xmlns:mui="http://firstfloorsoftware.com/ModernUI"
         Title="MainWindow"
         Width="525"
         Height="350"
         d:DataContext="{d:DesignInstance measurePlayer:Vm,
                                          IsDesignTimeCreatable=False}"
-        Background="{DynamicResource WindowBackground}"
         Loaded="MainWindow_OnLoaded"
         PreviewKeyDown="MainWindow_OnPreviewKeyDown"
         mc:Ignorable="d">
