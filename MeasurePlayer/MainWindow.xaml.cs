@@ -94,7 +94,21 @@
             this.Focus();
         }
 
-        private void ToggleFullScreen()
+        private void OnMediaFailed(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
+        {
+            MessageBox.Show(this, exceptionRoutedEventArgs.ErrorException.Message, "Media failed");
+        }
+
+        private void OnDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                this.vm.Path = files[0];
+            }
+        }
+
+        private void OnToggleFullScreenExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             if (this.WindowStyle == WindowStyle.SingleBorderWindow)
             {
@@ -109,33 +123,6 @@
                 this.VideoUrl.Visibility = Visibility.Visible;
                 this.WindowStyle = WindowStyle.SingleBorderWindow;
                 this.WindowState = WindowState.Normal;
-            }
-        }
-
-        private void MainWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.Control)
-            {
-                this.ToggleFullScreen();
-            }
-
-            if (e.Key == Key.F11)
-            {
-                this.ToggleFullScreen();
-            }
-        }
-
-        private void OnMediaFailed(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
-        {
-            MessageBox.Show(this, exceptionRoutedEventArgs.ErrorException.Message, "Media failed");
-        }
-
-        private void OnDrop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                this.vm.Path = files[0];
             }
         }
     }

@@ -12,8 +12,16 @@
         AllowDrop="True"
         Drop="OnDrop"
         Loaded="MainWindow_OnLoaded"
-        PreviewKeyDown="MainWindow_OnPreviewKeyDown"
         mc:Ignorable="d">
+    <Window.InputBindings>
+        <KeyBinding Key="Enter"
+                    Command="measurePlayer:Commands.ToggleFullScreen"
+                    Modifiers="Control" />
+        <KeyBinding Key="F11" Command="measurePlayer:Commands.ToggleFullScreen" />
+    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="measurePlayer:Commands.ToggleFullScreen" Executed="OnToggleFullScreenExecuted" />
+    </Window.CommandBindings>
     <DockPanel>
         <Grid>
             <Grid.RowDefinitions>
@@ -27,10 +35,10 @@
             <MediaElement x:Name="MediaElement"
                           Grid.RowSpan="2"
                           LoadedBehavior="Pause"
+                          MediaFailed="OnMediaFailed"
                           MouseLeftButtonDown="VideoClick"
                           MouseWheel="VideoWheel"
                           ScrubbingEnabled="True"
-                          MediaFailed="OnMediaFailed"
                           UnloadedBehavior="Close" />
 
             <Grid Grid.Row="0"
