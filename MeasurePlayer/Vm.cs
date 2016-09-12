@@ -114,7 +114,7 @@ namespace MeasurePlayer
 
         private void SaveBookmarks()
         {
-            BookmarksFile.SaveAsync(BookmarkFileName, Bookmarks);
+            BookmarksFile.Save(BookmarkFileName, Bookmarks);
             IsBookmarksDirty = false;
         }
 
@@ -202,8 +202,8 @@ namespace MeasurePlayer
 
                 _path = value;
                 Bookmarks.Clear();
-                var bookmarksFile = BookmarksFile.Load(BookmarkFileName);
-                foreach (var bookmark in bookmarksFile.Bookmarks)
+                var bookmarks = BookmarksFile.Load(BookmarkFileName);
+                foreach (var bookmark in bookmarks)
                 {
                     Bookmarks.Add(bookmark);
                 }
@@ -249,7 +249,7 @@ namespace MeasurePlayer
                 }
                 if (result == MessageBoxResult.Yes)
                 {
-                    BookmarksFile.SaveAsync(BookmarkFileName, Bookmarks);
+                    BookmarksFile.Save(BookmarkFileName, Bookmarks);
                 }
                 return result;
             }

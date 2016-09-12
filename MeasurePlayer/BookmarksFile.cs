@@ -9,66 +9,41 @@ namespace MeasurePlayer
 {
     public class BookmarksFile
     {
-        public BookmarksFile()
-        {
-            Bookmarks= new List<Bookmark>();
-        }
         private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(BookmarksFile));
+
+        private BookmarksFile()
+        {
+            this.Bookmarks= new List<Bookmark>();
+        }
+
         public List<Bookmark> Bookmarks { get; set; }
 
-        public static async Task SaveAsync(string fileName, IEnumerable<Bookmark> bookmarks)
+        public static void Save(string fileName, IEnumerable<Bookmark> bookmarks)
         {
-            BookmarksFile bookmarksFile = new BookmarksFile {Bookmarks = bookmarks.ToList()};
-            using (MemoryStream memoryStream = new MemoryStream())
+            var bookmarksFile = new BookmarksFile {Bookmarks = bookmarks.ToList()};
+            using (var stream = new FileStream(fileName, FileMode.Create))
             {
-                Serializer.Serialize(memoryStream, bookmarksFile);
-                memoryStream.Position = 0;
-                using (FileStream stream = new FileStream(fileName, FileMode.Create))
-                {
-                    await memoryStream.CopyToAsync(stream);
-                }
+                Serializer.Serialize(stream, bookmarksFile);
             }
         }
 
-        public static BookmarksFile Load(string fileName)
+        public static IReadOnlyList<Bookmark> Load(string fileName)
         {
+            if (!File.Exists(fileName))
+            {
+                return new Bookmark[0];
+            }
             try
             {
                 using (FileStream stream = new FileStream(fileName, FileMode.Open))
                 {
                     var file = (BookmarksFile)Serializer.Deserialize(stream);
-                    return file;
+                    return file.Bookmarks;
                 }
             }
             catch (FileNotFoundException)
             {
-                return new BookmarksFile();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public static async Task<BookmarksFile> LoadAsync(string fileName)
-        {
-            try
-            {
-                using (FileStream stream = new FileStream(fileName, FileMode.Open))
-                {
-                    MemoryStream memoryStream = new MemoryStream();
-                    await stream.CopyToAsync(memoryStream);
-                    var file = (BookmarksFile) Serializer.Deserialize(memoryStream);
-                    return file;
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                return new BookmarksFile();
-            }
-            catch (Exception)
-            {
-                throw;
+                return new Bookmark[0];
             }
         }
     }
