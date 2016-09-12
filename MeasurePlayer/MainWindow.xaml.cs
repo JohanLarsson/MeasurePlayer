@@ -126,5 +126,10 @@
                 this.ToggleFullScreen();
             }
         }
+
+        private void OnMediaFailed(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
+        {
+            MessageBox.Show(this, exceptionRoutedEventArgs.ErrorException.Message, "Media failed");
+        }
     }
 }

@@ -28,6 +28,7 @@
                           MouseLeftButtonDown="VideoClick"
                           MouseWheel="VideoWheel"
                           ScrubbingEnabled="True"
+                          MediaFailed="OnMediaFailed"
                           UnloadedBehavior="Close" />
 
             <Grid Grid.Row="0"
@@ -43,7 +44,7 @@
                               HorizontalAlignment="Center"
                               VerticalAlignment="Bottom"
                               HorizontalContentAlignment="Center"
-                              Command="{Binding TogglePlayPauseCmd}"
+                              Command="{Binding TogglePlayPauseCommand}"
                               Style="{StaticResource PlayPauseButton}" />
                 <StackPanel Grid.Row="0"
                             HorizontalAlignment="Right"

@@ -16,11 +16,13 @@
 
     public class Vm : INotifyPropertyChanged
     {
+        private readonly MediaTimeline timeline = new MediaTimeline();
+        private readonly MediaElement mediaElement;
+
         public Vm(MediaElement mediaElement)
         {
             this.path = "Browse for a file";
             this.mediaElement = mediaElement;
-            this.mediaElement.MediaFailed += this.MediaElementOnMediaFailed;
             this.Bookmarks.CollectionChanged += (sender, e) =>
             {
                 if (e.OldItems != null)
@@ -41,32 +43,47 @@
 
                 this.IsBookmarksDirty = true;
             };
+
+            this.PlayCommand = new RelayCommand(o => this.Play(), o => !this.IsPlaying);
+            this.PauseCommand = new RelayCommand(o => this.Pause(), o => this.IsPlaying);
+            this.TogglePlayPauseCommand = new RelayCommand(o => this.TogglePlayPause(), o => this.Clock != null);
+            this.StopCommand = new RelayCommand(o => this.Stop(), o => this.Clock != null && !this.mediaElement.Clock.IsPaused);
+            this.SaveBookmarksCmd = new RelayCommand(o => this.SaveBookmarks(), o => this.IsBookmarksDirty);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void MediaElementOnMediaFailed(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
-        {
-            MessageBox.Show("Media failed");
-        }
+        public ICommand PlayCommand { get; }
 
-        private void SetDirty(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-        {
-            this.IsBookmarksDirty = true;
-        }
+        public ICommand PauseCommand { get; }
 
-        private MediaTimeline timeline = new MediaTimeline();
-        private readonly MediaElement mediaElement;
-        public double FrameRate => this.Info == null ? 0 : (double)this.Info.Properties.System.Video.FrameRate.Value / 1000;
+        public ICommand TogglePlayPauseCommand { get; }
+
+        public ICommand StopCommand { get; }
+
+        public ICommand SaveBookmarksCmd { get; }
+
+        public double FrameRate
+        {
+            get
+            {
+                var frameRate = this.Info?.Properties.System.Video.FrameRate;
+                if (frameRate == null)
+                {
+                    return 0;
+                }
+
+                return (double)(frameRate.Value / 1000.0);
+            }
+        }
 
         public MediaClock Clock => this.mediaElement.Clock;
 
         private ClockController Controller => this.Clock.Controller;
 
-        private ICommand playCmd;
-        public ICommand PlayCmd
+        private void SetDirty(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            get { return this.playCmd ?? (this.playCmd = new RelayCommand(o => this.Play(), o => !this.IsPlaying)); }
+            this.IsBookmarksDirty = true;
         }
 
         public void Play()
@@ -78,16 +95,10 @@
             }
         }
 
-        private ICommand pauseCmd;
-        public ICommand PauseCmd
+        public bool IsPlaying
         {
-            get { return this.pauseCmd ?? (this.pauseCmd = new RelayCommand(o => this.Pause(), o => this.IsPlaying)); }
-        }
-
-        private ICommand togglePlayPauseCmd;
-        public ICommand TogglePlayPauseCmd
-        {
-            get { return this.togglePlayPauseCmd ?? (this.togglePlayPauseCmd = new RelayCommand(o => this.TogglePlayPause(), o => this.Clock != null)); }
+            get { return !this.mediaElement?.Clock.IsPaused != true; }
+            set { this.TogglePlayPause(); }
         }
 
         public void Pause()
@@ -95,6 +106,15 @@
             if (this.IsPlaying)
             {
                 this.Controller.Pause();
+                this.OnPropertyChanged(nameof(this.IsPlaying));
+            }
+        }
+
+        public void Stop()
+        {
+            if (this.IsPlaying)
+            {
+                this.Controller.Stop();
                 this.OnPropertyChanged(nameof(this.IsPlaying));
             }
         }
@@ -109,18 +129,6 @@
             {
                 this.Play();
             }
-        }
-
-        private ICommand stop;
-        public ICommand Stop
-        {
-            get { return this.stop ?? (this.stop = new RelayCommand(o => this.Controller.Stop(), o => this.Clock != null && !this.mediaElement.Clock.IsPaused)); }
-        }
-
-        private ICommand saveBookmarksCmd;
-        public ICommand SaveBookmarksCmd
-        {
-            get { return this.saveBookmarksCmd ?? (this.saveBookmarksCmd = new RelayCommand(o => this.SaveBookmarks(), o => this.IsBookmarksDirty)); }
         }
 
         private void SaveBookmarks()
@@ -141,19 +149,7 @@
 
         public bool IsBookmarksDirty { get; set; }
 
-        public bool IsPlaying
-        {
-            get
-            {
-                return this.Clock != null && !this.mediaElement.Clock.IsPaused;
-            }
-            set
-            {
-                this.TogglePlayPause();
-            }
-        }
-
-        public TimeSpan CurrentTime => (this.Clock != null) ? this.Clock.CurrentTime.Value : TimeSpan.Zero;
+        public TimeSpan CurrentTime => this.Clock?.CurrentTime ?? TimeSpan.Zero;
 
         public int CurrentFrame
         {
