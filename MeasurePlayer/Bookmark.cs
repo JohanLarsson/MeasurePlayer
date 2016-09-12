@@ -9,9 +9,17 @@
     public class Bookmark : INotifyPropertyChanged
     {
         private string name;
+        private TimeSpan time;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public string Name
         {
-            get { return this.name; }
+            get
+            {
+                return this.name;
+            }
+
             set
             {
                 if (Equals(value, this.name))
@@ -24,11 +32,14 @@
             }
         }
 
-        private TimeSpan time;
         [XmlIgnore]
         public TimeSpan Time
         {
-            get { return this.time; }
+            get
+            {
+                return this.time;
+            }
+
             set
             {
                 if (Equals(value, this.time))
@@ -41,25 +52,27 @@
             }
         }
 
-        // Pretend property for serialization
-        [XmlElement("Time"), Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        // For serialization
+        [XmlElement("Time")]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public long Ticks
         {
-            get { return this.time.Ticks; }
-            set {
-                this.time = new TimeSpan(value); }
-        }
+            get
+            {
+                return this.time.Ticks;
+            }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+            set
+            {
+                this.time = new TimeSpan(value);
+            }
+        }
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            var handler = this.PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

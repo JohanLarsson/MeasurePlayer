@@ -11,14 +11,15 @@
 
         private BookmarksFile()
         {
-            this.Bookmarks= new List<Bookmark>();
+            this.Bookmarks = new List<Bookmark>();
         }
 
+        // ReSharper disable once MemberCanBePrivate.Global Only used for serialization
         public List<Bookmark> Bookmarks { get; set; }
 
         public static void Save(string fileName, IEnumerable<Bookmark> bookmarks)
         {
-            var bookmarksFile = new BookmarksFile {Bookmarks = bookmarks.ToList()};
+            var bookmarksFile = new BookmarksFile { Bookmarks = bookmarks.ToList() };
             using (var stream = new FileStream(fileName, FileMode.Create))
             {
                 Serializer.Serialize(stream, bookmarksFile);
@@ -31,6 +32,7 @@
             {
                 return new Bookmark[0];
             }
+
             try
             {
                 using (var stream = new FileStream(fileName, FileMode.Open))

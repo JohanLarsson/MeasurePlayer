@@ -43,6 +43,8 @@
             };
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private void MediaElementOnMediaFailed(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
         {
             MessageBox.Show("Media failed");
@@ -55,11 +57,11 @@
 
         private MediaTimeline timeline = new MediaTimeline();
         private readonly MediaElement mediaElement;
-        public double FrameRate { get { return this.Info == null ? 0 : (double)this.Info.Properties.System.Video.FrameRate.Value / 1000; } }
+        public double FrameRate => this.Info == null ? 0 : (double)this.Info.Properties.System.Video.FrameRate.Value / 1000;
 
-        public MediaClock Clock { get { return this.mediaElement.Clock; } }
+        public MediaClock Clock => this.mediaElement.Clock;
 
-        private ClockController Controller { get { return this.Clock.Controller; } }
+        private ClockController Controller => this.Clock.Controller;
 
         private ICommand playCmd;
         public ICommand PlayCmd
@@ -72,7 +74,7 @@
             if (!this.IsPlaying)
             {
                 this.Controller.Resume();
-                this.OnPropertyChanged("IsPlaying");
+                this.OnPropertyChanged(nameof(this.IsPlaying));
             }
         }
 
@@ -93,7 +95,7 @@
             if (this.IsPlaying)
             {
                 this.Controller.Pause();
-                this.OnPropertyChanged("IsPlaying");
+                this.OnPropertyChanged(nameof(this.IsPlaying));
             }
         }
 
@@ -151,11 +153,15 @@
             }
         }
 
-        public TimeSpan CurrentTime { get { return (this.Clock != null) ? this.Clock.CurrentTime.Value : TimeSpan.Zero; } }
+        public TimeSpan CurrentTime => (this.Clock != null) ? this.Clock.CurrentTime.Value : TimeSpan.Zero;
 
         public int CurrentFrame
         {
-            get { return (int)Math.Round(this.FrameRate * this.CurrentTime.TotalSeconds, 0); }
+            get
+            {
+                return (int)Math.Round(this.FrameRate * this.CurrentTime.TotalSeconds, 0);
+            }
+
             set
             {
                 if (value < 0)
@@ -176,7 +182,11 @@
         private TimeSpan totalTime;
         public TimeSpan TotalTime
         {
-            get { return this.totalTime; }
+            get
+            {
+                return this.totalTime;
+            }
+
             set
             {
                 if (value.Equals(this.totalTime))
@@ -186,11 +196,11 @@
 
                 this.totalTime = value;
                 this.OnPropertyChanged();
-                this.OnPropertyChanged("TotalFrames");
+                this.OnPropertyChanged(nameof(this.TotalFrames));
             }
         }
 
-        public int TotalFrames { get { return (int)Math.Round(this.FrameRate * this.TotalTime.TotalSeconds, 0); } }
+        public int TotalFrames => (int)Math.Round(this.FrameRate * this.TotalTime.TotalSeconds, 0);
 
         public void Seek(TimeSpan timeSpan)
         {
@@ -210,7 +220,11 @@
         private string path;
         public string Path
         {
-            get { return this.path; }
+            get
+            {
+                return this.path;
+            }
+
             set
             {
                 if (value == this.path)
@@ -231,6 +245,7 @@
                 {
                     this.Bookmarks.Add(bookmark);
                 }
+
                 this.IsBookmarksDirty = false;
                 this.timeline.Source = new Uri(this.Path);
                 this.mediaElement.Clock = this.timeline.Source != null
@@ -244,8 +259,8 @@
                     };
                     this.Clock.CurrentTimeInvalidated += (sender, args) =>
                     {
-                        this.OnPropertyChanged("CurrentTime");
-                        this.OnPropertyChanged("CurrentFrame");
+                        this.OnPropertyChanged(nameof(this.CurrentTime));
+                        this.OnPropertyChanged(nameof(this.CurrentFrame));
                     };
                     this.Controller.Begin();
                     this.Controller.Pause();
@@ -254,10 +269,10 @@
                 {
                     this.TotalTime = TimeSpan.Zero;
                 }
-                this.Info = ShellFile.FromFilePath(this.path);
 
+                this.Info = ShellFile.FromFilePath(this.path);
                 this.OnPropertyChanged();
-                this.OnPropertyChanged("Clock");
+                this.OnPropertyChanged(nameof(this.Clock));
             }
         }
 
@@ -268,22 +283,28 @@
                 var result = MessageBox.Show("Do you want to save bookmarks?", "Save bookmarks", MessageBoxButton.YesNoCancel);
                 if (result == MessageBoxResult.Cancel)
                 {
-
                     return result;
                 }
+
                 if (result == MessageBoxResult.Yes)
                 {
                     BookmarksFile.Save(this.BookmarkFileName, this.Bookmarks);
                 }
+
                 return result;
             }
+
             return MessageBoxResult.No;
         }
 
         private ShellFile info;
         public ShellFile Info
         {
-            get { return this.info; }
+            get
+            {
+                return this.info;
+            }
+
             set
             {
                 if (Equals(value, this.info))
@@ -299,7 +320,11 @@
         private TimeSpan position;
         public TimeSpan Position
         {
-            get { return this.position; }
+            get
+            {
+                return this.position;
+            }
+
             set
             {
                 if (value.Equals(this.position))
@@ -315,7 +340,11 @@
         private Duration duration;
         public Duration Duration
         {
-            get { return this.duration; }
+            get
+            {
+                return this.duration;
+            }
+
             set
             {
                 if (value.Equals(this.duration))
@@ -332,15 +361,16 @@
 
         private ObservableCollection<Bookmark> bookmarks;
         //private ObservableCollection<Bookmark> _innerBookMarks = new ObservableCollection<Bookmark>();
-        public ObservableCollection<Bookmark> Bookmarks
-        {
-            get { return this.bookmarks ?? (this.bookmarks = new ObservableCollection<Bookmark>()); }
-        }
+        public ObservableCollection<Bookmark> Bookmarks => this.bookmarks ?? (this.bookmarks = new ObservableCollection<Bookmark>());
 
         private List<Bookmark> selectedBookmarks;
         public List<Bookmark> SelectedBookmarks
         {
-            get { return this.selectedBookmarks; }
+            get
+            {
+                return this.selectedBookmarks;
+            }
+
             set
             {
                 if (Equals(value, this.selectedBookmarks))
@@ -350,7 +380,7 @@
 
                 this.selectedBookmarks = value;
                 this.OnPropertyChanged();
-                this.OnPropertyChanged("Diff");
+                this.OnPropertyChanged(nameof(this.Diff));
             }
         }
 
@@ -367,29 +397,25 @@
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            var handler = this.PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
 
         public void AddBookmark()
         {
             var bookmark = this.Bookmarks.FirstOrDefault(x => x.Time > this.CurrentTime);
-            if (bookmark == null) this.Bookmarks.Add(new Bookmark() { Time = this.CurrentTime });
+            if (bookmark == null)
+            {
+                var item = new Bookmark { Time = this.CurrentTime };
+                this.Bookmarks.Add(item);
+            }
             else
             {
                 var indexOf = this.Bookmarks.IndexOf(bookmark);
-                this.Bookmarks.Insert(indexOf, new Bookmark() { Time = this.CurrentTime });
+                this.Bookmarks.Insert(indexOf, new Bookmark { Time = this.CurrentTime });
             }
-
         }
     }
 }

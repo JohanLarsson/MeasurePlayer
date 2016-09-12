@@ -74,9 +74,6 @@
     <Compile Include="FileControl.xaml.cs">
       <DependentUpon>FileControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PlayerPage.xaml.cs">
-      <DependentUpon>PlayerPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="TimeSpanToMsConverter.cs" />
     <Compile Include="Vm.cs" />
     <Page Include="MainWindow.xaml">
@@ -93,10 +90,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="FileControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PlayerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -11,64 +11,13 @@
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly Vm vm;
+
         public MainWindow()
         {
-            //this.DefaultStyleKey = typeof(ModernWindow);
             this.InitializeComponent();
             this.vm = new Vm(this.MediaElement);
             this.DataContext = this.vm;
-        }
-
-        private Vm vm;
-        private void VideoClick(object sender, MouseButtonEventArgs e)
-        {
-            //if (e.ClickCount == 1)
-            //{
-            //    if (_vm.IsPlaying)
-            //        _vm.Pause();
-            //}
-            if (e.ClickCount != 2)
-            {
-                return;
-            }
-
-            this.vm.AddBookmark();
-        }
-
-        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-            var selected = this.Bookmarks.SelectedItems.Cast<Bookmark>().ToList();
-            this.vm.SelectedBookmarks = selected;
-            if (this.Bookmarks.SelectedItems.Count != 1)
-            {
-                return;
-            }
-
-            this.vm.Seek(((Bookmark)this.Bookmarks.SelectedItems[0]).Time);
-        }
-
-        private void VideoWheel(object sender, MouseWheelEventArgs e)
-        {
-            this.vm.Step(Multiplier() * Math.Sign(e.Delta));
-        }
-
-        private void VideoKey(object sender, KeyEventArgs e)
-        {
-
-            if (e.Key == Key.Space)
-            {
-                this.vm.TogglePlayPause();
-            }
-            var multiplier = Multiplier();
-            if (e.Key == Key.Left)
-            {
-                this.vm.CurrentFrame -= multiplier;
-            }
-            else if (e.Key == Key.Right)
-            {
-                this.vm.CurrentFrame += multiplier;
-            }
         }
 
         private static int Multiplier()
@@ -90,6 +39,56 @@
             }
 
             return multiplier;
+        }
+
+        private void VideoClick(object sender, MouseButtonEventArgs e)
+        {
+            //if (e.ClickCount == 1)
+            //{
+            //    if (_vm.IsPlaying)
+            //        _vm.Pause();
+            //}
+            if (e.ClickCount != 2)
+            {
+                return;
+            }
+
+            this.vm.AddBookmark();
+        }
+
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selected = this.Bookmarks.SelectedItems.Cast<Bookmark>().ToList();
+            this.vm.SelectedBookmarks = selected;
+            if (this.Bookmarks.SelectedItems.Count != 1)
+            {
+                return;
+            }
+
+            this.vm.Seek(((Bookmark)this.Bookmarks.SelectedItems[0]).Time);
+        }
+
+        private void VideoWheel(object sender, MouseWheelEventArgs e)
+        {
+            this.vm.Step(Multiplier() * Math.Sign(e.Delta));
+        }
+
+        private void VideoKey(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                this.vm.TogglePlayPause();
+            }
+
+            var multiplier = Multiplier();
+            if (e.Key == Key.Left)
+            {
+                this.vm.CurrentFrame -= multiplier;
+            }
+            else if (e.Key == Key.Right)
+            {
+                this.vm.CurrentFrame += multiplier;
+            }
         }
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -121,11 +120,11 @@
             {
                 this.ToggleFullScreen();
             }
+
             if (e.Key == Key.F11)
             {
                 this.ToggleFullScreen();
             }
         }
-
     }
 }

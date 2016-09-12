@@ -9,41 +9,46 @@
     /// </summary>
     public partial class FileControl : UserControl
     {
+        public static readonly DependencyProperty FilterProperty = DependencyProperty.Register(
+            "Filter",
+            typeof(string),
+            typeof(FileControl),
+            new PropertyMetadata(default(string)));
+
+        public static readonly DependencyProperty LabelTextProperty = DependencyProperty.Register(
+            "LabelText",
+            typeof(string),
+            typeof(FileControl),
+            new PropertyMetadata(default(string), (o, e) => ((FileControl)o).Label.Content = e.NewValue));
+
+        public static readonly DependencyProperty PathProperty = DependencyProperty.Register(
+            "Path",
+            typeof(string),
+            typeof(FileControl),
+            new PropertyMetadata(default(string), (o, e) => ((FileControl)o).PathTb.Text = (string)e.NewValue));
+
         public FileControl()
         {
             this.InitializeComponent();
         }
 
-        public static readonly DependencyProperty FilterProperty =
-            DependencyProperty.Register("Filter", typeof(string), typeof(FileControl), new PropertyMetadata(default(string)));
         public string Filter
         {
             get { return (string)this.GetValue(FilterProperty); }
-            set {
-                this.SetValue(FilterProperty, value); }
+            set { this.SetValue(FilterProperty, value); }
         }
 
-        public static readonly DependencyProperty LabelTextProperty =
-            DependencyProperty.Register("LabelText", typeof(string), typeof(FileControl), new PropertyMetadata(default(string), (o, e) => ((FileControl)o).Label.Content = e.NewValue));
         public string LabelText
         {
             get { return (string)this.GetValue(LabelTextProperty); }
-            set {
-                this.SetValue(LabelTextProperty, value); }
+            set { this.SetValue(LabelTextProperty, value); }
         }
-
-        public static readonly DependencyProperty PathProperty =
-            DependencyProperty.Register("Path", typeof(string), typeof(FileControl), new PropertyMetadata(default(string), (o, e) => ((FileControl)o).PathTb.Text = (string)e.NewValue));
 
         public string Path
         {
             get { return (string)this.GetValue(PathProperty); }
-            set
-            {
-                this.SetValue(PathProperty, value);
-            }
+            set { this.SetValue(PathProperty, value); }
         }
-
 
         private void BrowseClick(object sender, RoutedEventArgs e)
         {
@@ -58,7 +63,6 @@
                 this.Path = fileDialog.FileName;
                 this.SetCurrentValue(PathProperty, fileDialog.FileName);
             }
-
         }
 
         private void PathTb_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -66,6 +70,5 @@
             this.Path = this.PathTb.Text;
             //SetCurrentValue(PathProperty, PathTb.Text);
         }
-
     }
 }
