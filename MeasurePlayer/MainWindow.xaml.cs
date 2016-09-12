@@ -41,21 +41,6 @@
             return multiplier;
         }
 
-        private void VideoClick(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 1)
-            {
-                this.vm.TogglePlayPause();
-                e.Handled = true;
-            }
-
-            if (e.ClickCount == 2)
-            {
-                this.vm.AddBookmark(new Bookmark { Time = this.vm.CurrentTime });
-                e.Handled = true;
-            }
-        }
-
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selected = this.Bookmarks.SelectedItems.Cast<Bookmark>().ToList();
@@ -124,6 +109,22 @@
                 this.WindowStyle = WindowStyle.SingleBorderWindow;
                 this.WindowState = WindowState.Normal;
             }
+        }
+
+        private void OnSaveBookmarkExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.vm.AddBookmark(new Bookmark { Time = this.vm.CurrentTime });
+        }
+
+        private void OnTogglePlayPauseExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.vm.TogglePlayPause();
+        }
+
+        private void OnHelpExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var window = new Window { Content = new HelpView(), SizeToContent = SizeToContent.WidthAndHeight };
+            window.ShowDialog();
         }
     }
 }

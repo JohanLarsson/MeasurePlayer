@@ -4,6 +4,6 @@
 
     public class Commands
     {
-        public static RoutedUICommand ToggleFullScreen { get; } = new RoutedUICommand("Toggle fullscreen", nameof(ToggleFullScreen),typeof(Commands));
+        public static RoutedUICommand ToggleFullScreen { get; } = new RoutedUICommand("Toggle fullscreen", nameof(ToggleFullScreen), typeof(Commands));
     }
 }

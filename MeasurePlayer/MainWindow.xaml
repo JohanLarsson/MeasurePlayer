@@ -18,9 +18,11 @@
                     Command="measurePlayer:Commands.ToggleFullScreen"
                     Modifiers="Control" />
         <KeyBinding Key="F11" Command="measurePlayer:Commands.ToggleFullScreen" />
+        <KeyBinding Command="MediaCommands.TogglePlayPause" Key="Space" />
     </Window.InputBindings>
     <Window.CommandBindings>
         <CommandBinding Command="measurePlayer:Commands.ToggleFullScreen" Executed="OnToggleFullScreenExecuted" />
+        <CommandBinding Command="Help" Executed="OnHelpExecuted" />
     </Window.CommandBindings>
     <DockPanel>
         <Grid>
@@ -36,10 +38,17 @@
                           Grid.RowSpan="2"
                           LoadedBehavior="Pause"
                           MediaFailed="OnMediaFailed"
-                          MouseLeftButtonDown="VideoClick"
                           MouseWheel="VideoWheel"
                           ScrubbingEnabled="True"
-                          UnloadedBehavior="Close" />
+                          UnloadedBehavior="Close">
+                <MediaElement.CommandBindings>
+                    <CommandBinding Command="Save" Executed="OnSaveBookmarkExecuted" />
+                    <CommandBinding Command="MediaCommands.TogglePlayPause" Executed="OnTogglePlayPauseExecuted" />
+                </MediaElement.CommandBindings>
+                <MediaElement.InputBindings>
+                    <MouseBinding Command="Save" MouseAction="LeftDoubleClick" />
+                </MediaElement.InputBindings>
+            </MediaElement>
 
             <Grid Grid.Row="0"
                   Grid.Column="0"
