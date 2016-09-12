@@ -35,7 +35,7 @@ namespace MeasurePlayer
             }
             try
             {
-                using (FileStream stream = new FileStream(fileName, FileMode.Open))
+                using (var stream = new FileStream(fileName, FileMode.Open))
                 {
                     var file = (BookmarksFile)Serializer.Deserialize(stream);
                     return file.Bookmarks;

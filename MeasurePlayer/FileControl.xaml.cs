@@ -62,7 +62,7 @@ namespace MeasurePlayer
                 Filter = Filter,
                 Multiselect = false
             };
-            bool? showDialog = fileDialog.ShowDialog();
+            var showDialog = fileDialog.ShowDialog();
             if (showDialog == true)
             {
                 Path = fileDialog.FileName;

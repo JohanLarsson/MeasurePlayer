@@ -74,7 +74,7 @@ namespace MeasurePlayer
 
         private static int Multiplier()
         {
-            int multiplier = 1;
+            var multiplier = 1;
             if (Keyboard.Modifiers == ModifierKeys.Control)
                 multiplier = 10;
             if (Keyboard.Modifiers == ModifierKeys.Shift)

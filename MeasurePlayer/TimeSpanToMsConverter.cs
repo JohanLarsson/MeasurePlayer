@@ -17,7 +17,7 @@ namespace MeasurePlayer
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            TimeSpan fromMilliseconds = TimeSpan.FromMilliseconds((double) value);
+            var fromMilliseconds = TimeSpan.FromMilliseconds((double) value);
             return fromMilliseconds;
         }
     }
