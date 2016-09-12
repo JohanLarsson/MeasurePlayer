@@ -1,36 +1,43 @@
-﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Xml.Serialization;
-
-namespace MeasurePlayer
+﻿namespace MeasurePlayer
 {
+    using System;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+    using System.Xml.Serialization;
     using JetBrains.Annotations;
 
     public class Bookmark : INotifyPropertyChanged
     {
-        private string _name;
+        private string name;
         public string Name
         {
-            get { return _name; }
+            get { return this.name; }
             set
             {
-                if (Equals(value, _name)) return;
-                _name = value;
-                OnPropertyChanged();
+                if (Equals(value, this.name))
+                {
+                    return;
+                }
+
+                this.name = value;
+                this.OnPropertyChanged();
             }
         }
 
-        private TimeSpan _time;
+        private TimeSpan time;
         [XmlIgnore]
         public TimeSpan Time
         {
-            get { return _time; }
+            get { return this.time; }
             set
             {
-                if (Equals(value, _time)) return;
-                _time = value;
-                OnPropertyChanged();
+                if (Equals(value, this.time))
+                {
+                    return;
+                }
+
+                this.time = value;
+                this.OnPropertyChanged();
             }
         }
 
@@ -38,8 +45,9 @@ namespace MeasurePlayer
         [XmlElement("Time"), Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public long Ticks
         {
-            get { return _time.Ticks; }
-            set { _time = new TimeSpan(value); }
+            get { return this.time.Ticks; }
+            set {
+                this.time = new TimeSpan(value); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -47,8 +55,11 @@ namespace MeasurePlayer
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            var handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

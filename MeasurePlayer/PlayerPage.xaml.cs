@@ -1,31 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-namespace MeasurePlayer
+﻿namespace MeasurePlayer
 {
+    using System;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+
     /// <summary>
     /// Interaction logic for PlayerPage.xaml
     /// </summary>
     public partial class PlayerPage : Page
     {
-        private Vm _vm;
+        private Vm vm;
         public PlayerPage()
         {
-            InitializeComponent();
-            _vm = new Vm(MediaElement);
-            this.DataContext = _vm;
+            this.InitializeComponent();
+            this.vm = new Vm(this.MediaElement);
+            this.DataContext = this.vm;
         }
 
 
@@ -38,20 +28,26 @@ namespace MeasurePlayer
             //        _vm.Pause();
             //}
             if (e.ClickCount != 2)
+            {
                 return;
-            _vm.AddBookmark();
+            }
+
+            this.vm.AddBookmark();
         }
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Bookmarks.SelectedItems.Count != 1)
+            if (this.Bookmarks.SelectedItems.Count != 1)
+            {
                 return;
-            _vm.Seek(((Bookmark)Bookmarks.SelectedItems[0]).Time);
+            }
+
+            this.vm.Seek(((Bookmark)this.Bookmarks.SelectedItems[0]).Time);
         }
 
         private void VideoWheel(object sender, MouseWheelEventArgs e)
         {
-            _vm.Step(Multiplier() * Math.Sign(e.Delta));
+            this.vm.Step(Multiplier() * Math.Sign(e.Delta));
         }
 
         private void VideoKey(object sender, KeyEventArgs e)
@@ -59,16 +55,16 @@ namespace MeasurePlayer
 
             if (e.Key == Key.Space)
             {
-                _vm.TogglePlayPause();
+                this.vm.TogglePlayPause();
             }
             var multiplier = Multiplier();
             if (e.Key == Key.Left)
             {
-                _vm.CurrentFrame -= multiplier;
+                this.vm.CurrentFrame -= multiplier;
             }
             else if (e.Key == Key.Right)
             {
-                _vm.CurrentFrame += multiplier;
+                this.vm.CurrentFrame += multiplier;
             }
         }
 
@@ -76,11 +72,20 @@ namespace MeasurePlayer
         {
             var multiplier = 1;
             if (Keyboard.Modifiers == ModifierKeys.Control)
+            {
                 multiplier = 10;
+            }
+
             if (Keyboard.Modifiers == ModifierKeys.Shift)
+            {
                 multiplier = 100;
+            }
+
             if (Keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
+            {
                 multiplier = 1000;
+            }
+
             return multiplier;
         }
 

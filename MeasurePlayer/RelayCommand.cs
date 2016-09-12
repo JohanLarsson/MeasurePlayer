@@ -1,36 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-namespace MeasurePlayer
+﻿namespace MeasurePlayer
 {
+    using System;
+    using System.Windows.Input;
+
     public class RelayCommand : ICommand
     {
-        private readonly Action<object> _action;
-        private readonly Predicate<object> _condition;
+        private readonly Action<object> action;
+        private readonly Predicate<object> condition;
+
         public RelayCommand(Action<object> action, Predicate<object> condition)
         {
-            _action = action;
-            _condition = condition ?? (o => true);
+            this.action = action;
+            this.condition = condition ?? (o => true);
         }
 
         public RelayCommand(Action<object> action)
+            : this(action, _ => true)
         {
-            _action = action;
-            _condition = (o) => true;
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return _condition(parameter);
-        }
-
-        public void Execute(object parameter)
-        {
-            _action(parameter);
         }
 
         /// <summary>
@@ -40,6 +26,16 @@ namespace MeasurePlayer
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return this.condition(parameter);
+        }
+
+        public void Execute(object parameter)
+        {
+            this.action(parameter);
         }
     }
 }

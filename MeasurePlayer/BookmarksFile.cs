@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-
-namespace MeasurePlayer
+﻿namespace MeasurePlayer
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Xml.Serialization;
+
     public class BookmarksFile
     {
         private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(BookmarksFile));

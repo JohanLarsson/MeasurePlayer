@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Win32;
-
-namespace MeasurePlayer
+﻿namespace MeasurePlayer
 {
+    using System.Windows;
+    using System.Windows.Controls;
+    using Microsoft.Win32;
+
     /// <summary>
     /// Interaction logic for FileControl.xaml
     /// </summary>
@@ -23,23 +11,25 @@ namespace MeasurePlayer
     {
         public FileControl()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         public static readonly DependencyProperty FilterProperty =
             DependencyProperty.Register("Filter", typeof(string), typeof(FileControl), new PropertyMetadata(default(string)));
         public string Filter
         {
-            get { return (string)GetValue(FilterProperty); }
-            set { SetValue(FilterProperty, value); }
+            get { return (string)this.GetValue(FilterProperty); }
+            set {
+                this.SetValue(FilterProperty, value); }
         }
 
         public static readonly DependencyProperty LabelTextProperty =
             DependencyProperty.Register("LabelText", typeof(string), typeof(FileControl), new PropertyMetadata(default(string), (o, e) => ((FileControl)o).Label.Content = e.NewValue));
         public string LabelText
         {
-            get { return (string)GetValue(LabelTextProperty); }
-            set { SetValue(LabelTextProperty, value); }
+            get { return (string)this.GetValue(LabelTextProperty); }
+            set {
+                this.SetValue(LabelTextProperty, value); }
         }
 
         public static readonly DependencyProperty PathProperty =
@@ -47,10 +37,10 @@ namespace MeasurePlayer
 
         public string Path
         {
-            get { return (string)GetValue(PathProperty); }
+            get { return (string)this.GetValue(PathProperty); }
             set
             {
-                SetValue(PathProperty, value);
+                this.SetValue(PathProperty, value);
             }
         }
 
@@ -59,21 +49,21 @@ namespace MeasurePlayer
         {
             var fileDialog = new OpenFileDialog
             {
-                Filter = Filter,
+                Filter = this.Filter,
                 Multiselect = false
             };
             var showDialog = fileDialog.ShowDialog();
             if (showDialog == true)
             {
-                Path = fileDialog.FileName;
-                SetCurrentValue(PathProperty, fileDialog.FileName);
+                this.Path = fileDialog.FileName;
+                this.SetCurrentValue(PathProperty, fileDialog.FileName);
             }
 
         }
 
         private void PathTb_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            Path = PathTb.Text;
+            this.Path = this.PathTb.Text;
             //SetCurrentValue(PathProperty, PathTb.Text);
         }
 

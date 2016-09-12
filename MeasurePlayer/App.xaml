@@ -18,7 +18,7 @@
                         <ControlTemplate>
                             <Grid>
                                 <Ellipse Fill="Transparent"/>
-                                <Path x:Name="IconPath" Data="{StaticResource PlayGeometry}" Fill="{TemplateBinding Background}" Stroke="{TemplateBinding Foreground}" StrokeThickness="2"></Path>
+                                <Path x:Name="IconPath" Data="{StaticResource PlayGeometry}" Fill="{TemplateBinding Background}" Stroke="{TemplateBinding Foreground}" StrokeThickness="2" />
                             </Grid>
 
                             <ControlTemplate.Triggers>
@@ -37,3 +37,4 @@
         </ResourceDictionary>
     </Application.Resources>
 </Application>
+

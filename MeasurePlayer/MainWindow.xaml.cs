@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using FirstFloor.ModernUI.Windows.Controls;
-
-namespace MeasurePlayer
+﻿namespace MeasurePlayer
 {
+    using System;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -25,12 +14,12 @@ namespace MeasurePlayer
         public MainWindow()
         {
             //this.DefaultStyleKey = typeof(ModernWindow);
-            InitializeComponent();
-                        _vm = new Vm(MediaElement);
-            this.DataContext = _vm;
+            this.InitializeComponent();
+            this.vm = new Vm(this.MediaElement);
+            this.DataContext = this.vm;
         }
 
-        private Vm _vm;
+        private Vm vm;
         private void VideoClick(object sender, MouseButtonEventArgs e)
         {
             //if (e.ClickCount == 1)
@@ -39,23 +28,29 @@ namespace MeasurePlayer
             //        _vm.Pause();
             //}
             if (e.ClickCount != 2)
+            {
                 return;
-            _vm.AddBookmark();
+            }
+
+            this.vm.AddBookmark();
         }
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-            var selected = Bookmarks.SelectedItems.Cast<Bookmark>().ToList();
-            _vm.SelectedBookmarks = selected;
-            if (Bookmarks.SelectedItems.Count != 1)
+            var selected = this.Bookmarks.SelectedItems.Cast<Bookmark>().ToList();
+            this.vm.SelectedBookmarks = selected;
+            if (this.Bookmarks.SelectedItems.Count != 1)
+            {
                 return;
-            _vm.Seek(((Bookmark)Bookmarks.SelectedItems[0]).Time);
+            }
+
+            this.vm.Seek(((Bookmark)this.Bookmarks.SelectedItems[0]).Time);
         }
 
         private void VideoWheel(object sender, MouseWheelEventArgs e)
         {
-            _vm.Step(Multiplier() * Math.Sign(e.Delta));
+            this.vm.Step(Multiplier() * Math.Sign(e.Delta));
         }
 
         private void VideoKey(object sender, KeyEventArgs e)
@@ -63,16 +58,16 @@ namespace MeasurePlayer
 
             if (e.Key == Key.Space)
             {
-                _vm.TogglePlayPause();
+                this.vm.TogglePlayPause();
             }
             var multiplier = Multiplier();
             if (e.Key == Key.Left)
             {
-                _vm.CurrentFrame -= multiplier;
+                this.vm.CurrentFrame -= multiplier;
             }
             else if (e.Key == Key.Right)
             {
-                _vm.CurrentFrame += multiplier;
+                this.vm.CurrentFrame += multiplier;
             }
         }
 
@@ -80,11 +75,20 @@ namespace MeasurePlayer
         {
             var multiplier = 1;
             if (Keyboard.Modifiers == ModifierKeys.Control)
+            {
                 multiplier = 10;
+            }
+
             if (Keyboard.Modifiers == ModifierKeys.Shift)
+            {
                 multiplier = 100;
+            }
+
             if (Keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
+            {
                 multiplier = 1000;
+            }
+
             return multiplier;
         }
 
@@ -97,15 +101,15 @@ namespace MeasurePlayer
         {
             if (this.WindowStyle == WindowStyle.SingleBorderWindow)
             {
-                BookmarksExpander.Visibility = Visibility.Collapsed;
-                VideoUrl.Visibility = Visibility.Collapsed;
+                this.BookmarksExpander.Visibility = Visibility.Collapsed;
+                this.VideoUrl.Visibility = Visibility.Collapsed;
                 this.WindowStyle = WindowStyle.None;
                 this.WindowState = WindowState.Maximized;
             }
             else
             {
-                BookmarksExpander.Visibility = Visibility.Visible;
-                VideoUrl.Visibility = Visibility.Visible;
+                this.BookmarksExpander.Visibility = Visibility.Visible;
+                this.VideoUrl.Visibility = Visibility.Visible;
                 this.WindowStyle = WindowStyle.SingleBorderWindow;
                 this.WindowState = WindowState.Normal;
             }
@@ -115,11 +119,11 @@ namespace MeasurePlayer
         {
             if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.Control)
             {
-                ToggleFullScreen();
+                this.ToggleFullScreen();
             }
             if (e.Key == Key.F11)
             {
-                ToggleFullScreen();
+                this.ToggleFullScreen();
             }
         }
 
