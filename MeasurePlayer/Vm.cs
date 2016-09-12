@@ -12,11 +12,12 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using MeasurePlayer.Annotations;
 using Microsoft.WindowsAPICodePack.Shell;
 
 namespace MeasurePlayer
 {
+    using JetBrains.Annotations;
+
     public class Vm : INotifyPropertyChanged
     {
         public Vm(MediaElement mediaElement)

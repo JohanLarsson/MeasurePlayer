@@ -2,10 +2,11 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
-using MeasurePlayer.Annotations;
 
 namespace MeasurePlayer
 {
+    using JetBrains.Annotations;
+
     public class Bookmark : INotifyPropertyChanged
     {
         private string _name;
