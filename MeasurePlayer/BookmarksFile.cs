@@ -17,6 +17,11 @@
         // ReSharper disable once MemberCanBePrivate.Global Only used for serialization
         public List<Bookmark> Bookmarks { get; set; }
 
+        public static string GetBookmarksFileName(string fileName)
+        {
+            return System.IO.Path.ChangeExtension(fileName, null) + ".bookmarks.xml";
+        }
+
         public static void Save(string fileName, IEnumerable<Bookmark> bookmarks)
         {
             var bookmarksFile = new BookmarksFile { Bookmarks = bookmarks.ToList() };

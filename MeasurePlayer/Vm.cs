@@ -18,6 +18,7 @@
     {
         private readonly MediaTimeline timeline = new MediaTimeline();
         private readonly MediaElement mediaElement;
+        private string path;
 
         public Vm(MediaElement mediaElement)
         {
@@ -86,65 +87,16 @@
             this.IsBookmarksDirty = true;
         }
 
-        public void Play()
-        {
-            if (!this.IsPlaying)
-            {
-                this.Controller.Resume();
-                this.OnPropertyChanged(nameof(this.IsPlaying));
-            }
-        }
-
         public bool IsPlaying
         {
-            get { return !this.mediaElement?.Clock.IsPaused != true; }
+            get { return this.mediaElement?.Clock.IsPaused != true; }
             set { this.TogglePlayPause(); }
-        }
-
-        public void Pause()
-        {
-            if (this.IsPlaying)
-            {
-                this.Controller.Pause();
-                this.OnPropertyChanged(nameof(this.IsPlaying));
-            }
-        }
-
-        public void Stop()
-        {
-            if (this.IsPlaying)
-            {
-                this.Controller.Stop();
-                this.OnPropertyChanged(nameof(this.IsPlaying));
-            }
-        }
-
-        public void TogglePlayPause()
-        {
-            if (this.IsPlaying)
-            {
-                this.Pause();
-            }
-            else
-            {
-                this.Play();
-            }
         }
 
         private void SaveBookmarks()
         {
-            BookmarksFile.Save(this.BookmarkFileName, this.Bookmarks);
+            BookmarksFile.Save(BookmarksFile.GetBookmarksFileName(this.path), this.Bookmarks);
             this.IsBookmarksDirty = false;
-        }
-
-        private string BookmarkFileName
-        {
-            get
-            {
-                var directory = System.IO.Path.GetDirectoryName(this.Path);
-                var fileNameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(this.Path);
-                return System.IO.Path.Combine(directory, fileNameWithoutExtension + ".bookmarks.xml");
-            }
         }
 
         public bool IsBookmarksDirty { get; set; }
@@ -175,45 +127,10 @@
             }
         }
 
-        private TimeSpan totalTime;
-        public TimeSpan TotalTime
-        {
-            get
-            {
-                return this.totalTime;
-            }
-
-            set
-            {
-                if (value.Equals(this.totalTime))
-                {
-                    return;
-                }
-
-                this.totalTime = value;
-                this.OnPropertyChanged();
-                this.OnPropertyChanged(nameof(this.TotalFrames));
-            }
-        }
+        public TimeSpan TotalTime => this.Clock?.NaturalDuration.TimeSpan ?? TimeSpan.Zero;
 
         public int TotalFrames => (int)Math.Round(this.FrameRate * this.TotalTime.TotalSeconds, 0);
 
-        public void Seek(TimeSpan timeSpan)
-        {
-            if (this.Clock == null || timeSpan < TimeSpan.Zero || timeSpan > this.Clock.NaturalDuration.TimeSpan)
-            {
-                return;
-            }
-
-            this.Controller.Seek(timeSpan, TimeSeekOrigin.BeginTime);
-        }
-
-        public void Step(int frames)
-        {
-            this.Seek(TimeSpan.FromSeconds(frames / this.FrameRate + this.Clock.CurrentTime.Value.TotalSeconds));
-        }
-
-        private string path;
         public string Path
         {
             get
@@ -228,15 +145,14 @@
                     return;
                 }
 
-                if (this.AskBeforeSaveBookmarks() == MessageBoxResult.Cancel)
+                if (this.IsBookmarksDirty)
                 {
-                    this.OnPropertyChanged();
-                    return;
+                    this.AskBeforeSaveBookmarks();
                 }
 
                 this.path = value;
                 this.Bookmarks.Clear();
-                var bookmarks = BookmarksFile.Load(this.BookmarkFileName);
+                var bookmarks = BookmarksFile.Load(BookmarksFile.GetBookmarksFileName(this.path));
                 foreach (var bookmark in bookmarks)
                 {
                     this.Bookmarks.Add(bookmark);
@@ -250,9 +166,10 @@
                 if (this.Clock != null)
                 {
                     this.Clock.CurrentStateInvalidated += (sender, args) =>
-                    {
-                        this.TotalTime = (this.Clock != null) ? this.Clock.NaturalDuration.TimeSpan : TimeSpan.Zero;
-                    };
+                        {
+                            this.OnPropertyChanged(nameof(this.TotalTime));
+                            this.OnPropertyChanged(nameof(this.TotalFrames));
+                        };
                     this.Clock.CurrentTimeInvalidated += (sender, args) =>
                     {
                         this.OnPropertyChanged(nameof(this.CurrentTime));
@@ -263,7 +180,8 @@
                 }
                 else
                 {
-                    this.TotalTime = TimeSpan.Zero;
+                    this.OnPropertyChanged(nameof(this.TotalTime));
+                    this.OnPropertyChanged(nameof(this.TotalFrames));
                 }
 
                 this.Info = ShellFile.FromFilePath(this.path);
@@ -272,25 +190,21 @@
             }
         }
 
-        private MessageBoxResult AskBeforeSaveBookmarks()
+        private void AskBeforeSaveBookmarks()
         {
             if (this.IsBookmarksDirty)
             {
                 var result = MessageBox.Show("Do you want to save bookmarks?", "Save bookmarks", MessageBoxButton.YesNoCancel);
                 if (result == MessageBoxResult.Cancel)
                 {
-                    return result;
+                    return;
                 }
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    BookmarksFile.Save(this.BookmarkFileName, this.Bookmarks);
+                    BookmarksFile.Save(BookmarksFile.GetBookmarksFileName(this.path), this.Bookmarks);
                 }
-
-                return result;
             }
-
-            return MessageBoxResult.No;
         }
 
         private ShellFile info;
@@ -312,48 +226,6 @@
                 this.OnPropertyChanged();
             }
         }
-
-        private TimeSpan position;
-        public TimeSpan Position
-        {
-            get
-            {
-                return this.position;
-            }
-
-            set
-            {
-                if (value.Equals(this.position))
-                {
-                    return;
-                }
-
-                this.position = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        private Duration duration;
-        public Duration Duration
-        {
-            get
-            {
-                return this.duration;
-            }
-
-            set
-            {
-                if (value.Equals(this.duration))
-                {
-                    return;
-                }
-
-                this.duration = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public double Length { get; set; }
 
         private ObservableCollection<Bookmark> bookmarks;
         //private ObservableCollection<Bookmark> _innerBookMarks = new ObservableCollection<Bookmark>();
@@ -391,6 +263,67 @@
 
                 return this.SelectedBookmarks.Max(x => x.Time) - this.SelectedBookmarks.Min(x => x.Time);
             }
+        }
+
+        public void Play()
+        {
+            if (!this.IsPlaying)
+            {
+                this.Controller.Resume();
+                this.OnPropertyChanged(nameof(this.IsPlaying));
+            }
+        }
+
+        public void Pause()
+        {
+            if (this.IsPlaying)
+            {
+                this.Controller.Pause();
+                this.OnPropertyChanged(nameof(this.IsPlaying));
+            }
+        }
+
+        public void Stop()
+        {
+            if (this.IsPlaying)
+            {
+                this.Controller.Stop();
+                this.OnPropertyChanged(nameof(this.IsPlaying));
+            }
+        }
+
+        public void TogglePlayPause()
+        {
+            if (this.IsPlaying)
+            {
+                this.Pause();
+            }
+            else
+            {
+                this.Play();
+            }
+        }
+
+        public void Seek(TimeSpan timeSpan)
+        {
+            if (this.Clock == null || timeSpan < TimeSpan.Zero || timeSpan > this.Clock.NaturalDuration.TimeSpan)
+            {
+                return;
+            }
+
+            this.Controller.Seek(timeSpan, TimeSeekOrigin.BeginTime);
+        }
+
+        public void Step(int frames)
+        {
+            var currentTime = this.Clock?.CurrentTime;
+            if (currentTime == null)
+            {
+                return;
+            }
+
+            var jump = TimeSpan.FromSeconds(frames / this.FrameRate);
+            this.Seek(jump + currentTime.Value);
         }
 
         [NotifyPropertyChangedInvocator]
