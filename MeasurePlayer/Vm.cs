@@ -147,7 +147,7 @@
 
                 if (this.IsBookmarksDirty)
                 {
-                    this.AskBeforeSaveBookmarks();
+                    BookmarksFile.AskBeforeSaveBookmarks(this.path, this.bookmarks);
                 }
 
                 this.path = value;
@@ -190,23 +190,6 @@
             }
         }
 
-        private void AskBeforeSaveBookmarks()
-        {
-            if (this.IsBookmarksDirty)
-            {
-                var result = MessageBox.Show("Do you want to save bookmarks?", "Save bookmarks", MessageBoxButton.YesNoCancel);
-                if (result == MessageBoxResult.Cancel)
-                {
-                    return;
-                }
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    BookmarksFile.Save(BookmarksFile.GetBookmarksFileName(this.path), this.Bookmarks);
-                }
-            }
-        }
-
         private ShellFile info;
         public ShellFile Info
         {
@@ -228,7 +211,7 @@
         }
 
         private ObservableCollection<Bookmark> bookmarks;
-        //private ObservableCollection<Bookmark> _innerBookMarks = new ObservableCollection<Bookmark>();
+
         public ObservableCollection<Bookmark> Bookmarks => this.bookmarks ?? (this.bookmarks = new ObservableCollection<Bookmark>());
 
         private List<Bookmark> selectedBookmarks;
@@ -332,19 +315,26 @@
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void AddBookmark()
+        public void AddBookmark(Bookmark bookmark)
         {
-            var bookmark = this.Bookmarks.FirstOrDefault(x => x.Time > this.CurrentTime);
-            if (bookmark == null)
+            for (int i = 0; i < this.bookmarks.Count; i++)
             {
-                var item = new Bookmark { Time = this.CurrentTime };
-                this.Bookmarks.Add(item);
+                if (this.bookmarks[i].Time > bookmark.Time)
+                {
+                    if (i > 0)
+                    {
+                        this.bookmarks.Insert(i - 1, bookmark);
+                    }
+                    else
+                    {
+                        this.bookmarks.Insert(0, bookmark);
+                    }
+
+                    return;
+                }
             }
-            else
-            {
-                var indexOf = this.Bookmarks.IndexOf(bookmark);
-                this.Bookmarks.Insert(indexOf, new Bookmark { Time = this.CurrentTime });
-            }
+
+            this.bookmarks.Add(bookmark);
         }
     }
 }

@@ -43,29 +43,27 @@
 
         private void VideoClick(object sender, MouseButtonEventArgs e)
         {
-            //if (e.ClickCount == 1)
-            //{
-            //    if (_vm.IsPlaying)
-            //        _vm.Pause();
-            //}
-            if (e.ClickCount != 2)
+            if (e.ClickCount == 1)
             {
-                return;
+                this.vm.TogglePlayPause();
+                e.Handled = true;
             }
 
-            this.vm.AddBookmark();
+            if (e.ClickCount == 2)
+            {
+                this.vm.AddBookmark(new Bookmark { Time = this.vm.CurrentTime });
+                e.Handled = true;
+            }
         }
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selected = this.Bookmarks.SelectedItems.Cast<Bookmark>().ToList();
             this.vm.SelectedBookmarks = selected;
-            if (this.Bookmarks.SelectedItems.Count != 1)
+            if (this.Bookmarks.SelectedItems.Count == 1)
             {
-                return;
+                this.vm.Seek(((Bookmark)this.Bookmarks.SelectedItems[0]).Time);
             }
-
-            this.vm.Seek(((Bookmark)this.Bookmarks.SelectedItems[0]).Time);
         }
 
         private void VideoWheel(object sender, MouseWheelEventArgs e)
@@ -130,6 +128,15 @@
         private void OnMediaFailed(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
         {
             MessageBox.Show(this, exceptionRoutedEventArgs.ErrorException.Message, "Media failed");
+        }
+
+        private void OnDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                this.vm.Path = files[0];
+            }
         }
     }
 }

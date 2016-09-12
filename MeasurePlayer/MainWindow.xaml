@@ -9,6 +9,8 @@
         Height="350"
         d:DataContext="{d:DesignInstance measurePlayer:Vm,
                                          IsDesignTimeCreatable=False}"
+        AllowDrop="True"
+        Drop="OnDrop"
         Loaded="MainWindow_OnLoaded"
         PreviewKeyDown="MainWindow_OnPreviewKeyDown"
         mc:Ignorable="d">
@@ -84,7 +86,6 @@
                         <TextBox IsReadOnly="True" Text="{Binding Diff, StringFormat='Diff: {0}', Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         <Button Command="{Binding SaveBookmarksCmd}">Save</Button>
                     </StackPanel>
-
                 </Grid>
 
             </Expander>

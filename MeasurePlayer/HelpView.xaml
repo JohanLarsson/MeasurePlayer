@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="MeasurePlayer.HelpView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="600"
+             d:DesignWidth="600"
+             mc:Ignorable="d">
+    <StackPanel>
+        <TextBlock Text="Open a file by dragging it onto the player." />
+        <TextBlock Text="Toggle play/pause by clicking or pressing space on the player." />
+        <TextBlock Text="Record a bookmark by doubleclicking on the player." />
+        <TextBlock Text="Move forward by rolling the mouse wheel. Modifiers" />
+        <TextBlock Text="* None moves one frame at the time" />
+        <TextBlock Text="* Ctrl moves ten frame at the time" />
+        <TextBlock Text="* Shift moves 100 frames at the time" />
+        <TextBlock Text="* Ctrl + Shift moves 1000 frames at the time" />
+    </StackPanel>
+</UserControl>
