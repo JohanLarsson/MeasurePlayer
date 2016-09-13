@@ -1,0 +1,8 @@
+source http://www.nuget.org/api/v2/
+framework >= net45
+
+nuget Gu.Wpf.Media
+nuget JetBrains.Annotations 
+nuget StyleCop.Analyzers 
+nuget Windows7APICodePack-Shell
+nuget NUnit

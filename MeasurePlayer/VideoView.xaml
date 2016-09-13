@@ -3,22 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:measurePlayer="clr-namespace:MeasurePlayer"
+             xmlns:media="https://github.com/JohanLarsson/Gu.Wpf.Media"
              d:DesignHeight="300"
              d:DesignWidth="300"
              KeyDown="OnKeyDown"
              MouseWheel="OnMouseWheel"
              mc:Ignorable="d">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Space"
+                    Command="TogglePlayPause"
+                    CommandTarget="{Binding ElementName=MediaElement}" />
+    </UserControl.InputBindings>
     <Grid>
-        <MediaElement x:Name="MediaElement"
-                      Grid.RowSpan="2"
-                      LoadedBehavior="Pause"
-                      MediaFailed="OnMediaFailed"
-                      ScrubbingEnabled="True"
-                      UnloadedBehavior="Close">
-            <MediaElement.CommandBindings>
-                <CommandBinding Command="MediaCommands.TogglePlayPause" Executed="OnTogglePlayPauseExecuted" />
-            </MediaElement.CommandBindings>
-        </MediaElement>
+        <media:MediaElementWrapper x:Name="MediaElement"
+                                   MediaFailed="OnMediaFailed"
+                                   ScrubbingEnabled="True"
+                                   Source="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                                   AncestorType={x:Type measurePlayer:VideoView}},
+                                                    Path=Source}" />
 
         <Grid Grid.Row="0"
               Grid.Column="0"
@@ -32,20 +35,28 @@
                           HorizontalAlignment="Center"
                           VerticalAlignment="Bottom"
                           HorizontalContentAlignment="Center"
-                          Command="{Binding TogglePlayPauseCommand}"
+                          Command="MediaCommands.TogglePlayPause"
+                          CommandTarget="{Binding ElementName=MediaElement}"
                           Style="{StaticResource PlayPauseButton}" />
-            <StackPanel Grid.Row="0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Bottom"
-                        Orientation="Horizontal">
-                <TextBlock Text="{Binding CurrentTime}" />
-                <TextBlock Text="{Binding TotalTime, StringFormat='/({0}) '}" />
-            </StackPanel>
+            <TextBlock Grid.Row="0"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Bottom">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0}/{1}">
+                        <Binding ElementName="MediaElement" Path="Position" />
+                        <Binding ElementName="MediaElement" Path="Length" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+
             <Slider Grid.Row="1"
-                    Maximum="{Binding TotalFrames}"
+                    Maximum="{Binding ElementName=MediaElement,
+                                      Path=Length,
+                                      Converter={x:Static measurePlayer:TimeSpanToSecondsConverter.Default}}"
                     Minimum="0"
-                    PreviewKeyDown="OnKeyDown"
-                    Value="{Binding CurrentFrame}" />
+                    Value="{Binding ElementName=MediaElement,
+                                    Path=Position,
+                                    Converter={x:Static measurePlayer:TimeSpanToSecondsConverter.Default}}" />
 
         </Grid>
     </Grid>

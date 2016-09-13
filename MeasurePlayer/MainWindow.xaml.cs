@@ -1,6 +1,5 @@
 ﻿namespace MeasurePlayer
 {
-    using System;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
@@ -26,7 +25,7 @@
             this.vm.SelectedBookmarks = selected;
             if (this.Bookmarks.SelectedItems.Count == 1)
             {
-                this.VideoView.Seek(((Bookmark)this.Bookmarks.SelectedItems[0]).Time);
+                this.VideoView.MediaElement.Position = ((Bookmark)this.Bookmarks.SelectedItems[0]).Time;
             }
         }
 
@@ -40,6 +39,7 @@
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                this.VideoView.Source = files[0];
                 this.vm.Path = files[0];
             }
         }
@@ -49,14 +49,12 @@
             if (this.WindowStyle == WindowStyle.SingleBorderWindow)
             {
                 this.BookmarksExpander.Visibility = Visibility.Collapsed;
-                this.VideoUrl.Visibility = Visibility.Collapsed;
                 this.WindowStyle = WindowStyle.None;
                 this.WindowState = WindowState.Maximized;
             }
             else
             {
                 this.BookmarksExpander.Visibility = Visibility.Visible;
-                this.VideoUrl.Visibility = Visibility.Visible;
                 this.WindowStyle = WindowStyle.SingleBorderWindow;
                 this.WindowState = WindowState.Normal;
             }
@@ -64,7 +62,7 @@
 
         private void OnSaveBookmarkExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            var time = this.VideoView.CurrentTime;
+            var time = this.VideoView.MediaElement.Position;
             if (time != null)
             {
                 this.vm.AddBookmark(new Bookmark { Time = time.Value });

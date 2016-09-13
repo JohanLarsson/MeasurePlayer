@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:media="https://github.com/JohanLarsson/Gu.Wpf.Media"
         xmlns:measurePlayer="clr-namespace:MeasurePlayer"
         Title="MainWindow"
         Width="525"
@@ -15,13 +16,12 @@
         mc:Ignorable="d">
     <Window.InputBindings>
         <KeyBinding Key="Enter"
-                    Command="measurePlayer:Commands.ToggleFullScreen"
+                    Command="media:Commands.ToggleFullScreen"
                     Modifiers="Control" />
-        <KeyBinding Key="F11" Command="measurePlayer:Commands.ToggleFullScreen" />
-        <KeyBinding Key="Space" Command="MediaCommands.TogglePlayPause" />
+        <KeyBinding Key="F11" Command="media:Commands.ToggleFullScreen" />
     </Window.InputBindings>
     <Window.CommandBindings>
-        <CommandBinding Command="measurePlayer:Commands.ToggleFullScreen" Executed="OnToggleFullScreenExecuted" />
+        <CommandBinding Command="media:Commands.ToggleFullScreen" Executed="OnToggleFullScreenExecuted" />
         <CommandBinding Command="Help" Executed="OnHelpExecuted" />
     </Window.CommandBindings>
     <DockPanel>
@@ -42,7 +42,7 @@
                     <MouseBinding Command="Save" MouseAction="LeftDoubleClick" />
                 </measurePlayer:VideoView.InputBindings>
             </measurePlayer:VideoView>
-            
+
             <Expander x:Name="BookmarksExpander"
                       Grid.Row="0"
                       Grid.RowSpan="2"
@@ -70,12 +70,6 @@
                 </Grid>
 
             </Expander>
-            <measurePlayer:FileControl x:Name="VideoUrl"
-                                       Grid.Row="1"
-                                       Grid.Column="0"
-                                       Path="{Binding Path,
-                                                      Mode=TwoWay,
-                                                      UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </DockPanel>
 </Window>

@@ -5,7 +5,7 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <measurePlayer:TimeSpanToMsConverter x:Key="TimeSpanToMsConverter"/>
+            <measurePlayer:TimeSpanToSecondsConverter x:Key="TimeSpanToMsConverter"/>
             <StreamGeometry x:Key="PlayGeometry">
                 M14.8,11.4 L30,18.991667 C30.8,19.333333 30.8,20.566667 30,20.991667 L14.22,28.89 C13.2,29.433333 12,29.2 12,27.65 L12,12.85 C12,10.8 13.2,10.4 14.8,11.4 z M20,5 C12,5 5,12 5,20 5,28 12,35 20,35 28,35 35,28 35,20 35,12 28,5 20,5 z M20,0 C31,0 40,9 40,20 40,31 31,40 20,40 9,40 0,31 0,20 0,9 9,0 20,0 z
             </StreamGeometry>

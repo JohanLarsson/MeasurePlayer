@@ -6,19 +6,20 @@
 
     public class VideoInfo
     {
-        public VideoInfo(ShellFile shellFile, TimeSpan length)
+        public VideoInfo(ShellFile shellFile)
         {
-            this.FrameRate = shellFile.Properties.System.Video.FrameRate.Value;
-            this.TotaleFrames = (uint?)(this.FrameRate * length.TotalMilliseconds);
+            this.FrameRate = MeasurePlayer.FrameRate.Create(shellFile.Properties.System.Video.FrameRate.Value);
+            var durationValue = shellFile.Properties.System.Media.Duration;
+            this.Duration = durationValue == null ? (TimeSpan?)null : TimeSpan.FromTicks((long)durationValue.Value);
         }
 
-        public uint? FrameRate { get; }
+        public FrameRate? FrameRate { get; }
 
-        public uint? TotaleFrames { get; }
+        public TimeSpan? Duration { get; }
 
-        public int? GetFrameAt(TimeSpan time)
+        public uint? GetFrameAt(TimeSpan time)
         {
-            return (int?)(this.FrameRate * time.TotalMilliseconds);
+            return (uint?)(this.FrameRate * time);
         }
 
         public TimeSpan? GetTimeAtFrame(uint frame)
@@ -28,7 +29,7 @@
                 return null;
             }
 
-            return TimeSpan.FromMilliseconds(this.FrameRate.Value * frame);
+            return frame / this.FrameRate;
         }
     }
 }
