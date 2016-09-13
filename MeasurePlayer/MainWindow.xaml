@@ -18,7 +18,7 @@
                     Command="measurePlayer:Commands.ToggleFullScreen"
                     Modifiers="Control" />
         <KeyBinding Key="F11" Command="measurePlayer:Commands.ToggleFullScreen" />
-        <KeyBinding Command="MediaCommands.TogglePlayPause" Key="Space" />
+        <KeyBinding Key="Space" Command="MediaCommands.TogglePlayPause" />
     </Window.InputBindings>
     <Window.CommandBindings>
         <CommandBinding Command="measurePlayer:Commands.ToggleFullScreen" Executed="OnToggleFullScreenExecuted" />
@@ -34,51 +34,15 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <MediaElement x:Name="MediaElement"
-                          Grid.RowSpan="2"
-                          LoadedBehavior="Pause"
-                          MediaFailed="OnMediaFailed"
-                          MouseWheel="VideoWheel"
-                          ScrubbingEnabled="True"
-                          UnloadedBehavior="Close">
-                <MediaElement.CommandBindings>
+            <measurePlayer:VideoView x:Name="VideoView">
+                <measurePlayer:VideoView.CommandBindings>
                     <CommandBinding Command="Save" Executed="OnSaveBookmarkExecuted" />
-                    <CommandBinding Command="MediaCommands.TogglePlayPause" Executed="OnTogglePlayPauseExecuted" />
-                </MediaElement.CommandBindings>
-                <MediaElement.InputBindings>
+                </measurePlayer:VideoView.CommandBindings>
+                <measurePlayer:VideoView.InputBindings>
                     <MouseBinding Command="Save" MouseAction="LeftDoubleClick" />
-                </MediaElement.InputBindings>
-            </MediaElement>
-
-            <Grid Grid.Row="0"
-                  Grid.Column="0"
-                  VerticalAlignment="Bottom"
-                  PreviewKeyDown="VideoKey">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <ToggleButton Grid.Row="0"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Bottom"
-                              HorizontalContentAlignment="Center"
-                              Command="{Binding TogglePlayPauseCommand}"
-                              Style="{StaticResource PlayPauseButton}" />
-                <StackPanel Grid.Row="0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                            Orientation="Horizontal">
-                    <TextBlock Text="{Binding CurrentTime}" />
-                    <TextBlock Text="{Binding TotalTime, StringFormat='/({0}) '}" />
-                </StackPanel>
-                <Slider Grid.Row="1"
-                        Maximum="{Binding TotalFrames}"
-                        Minimum="0"
-                        PreviewKeyDown="VideoKey"
-                        Value="{Binding CurrentFrame}" />
-
-            </Grid>
+                </measurePlayer:VideoView.InputBindings>
+            </measurePlayer:VideoView>
+            
             <Expander x:Name="BookmarksExpander"
                       Grid.Row="0"
                       Grid.RowSpan="2"

@@ -69,10 +69,15 @@
     <Compile Include="FileControl.xaml.cs">
       <DependentUpon>FileControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Framerate.cs" />
     <Compile Include="HelpView.xaml.cs">
       <DependentUpon>HelpView.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimeSpanToMsConverter.cs" />
+    <Compile Include="VideoInfo.cs" />
+    <Compile Include="VideoView.xaml.cs">
+      <DependentUpon>VideoView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Vm.cs" />
     <Page Include="HelpView.xaml">
       <SubType>Designer</SubType>
@@ -92,6 +97,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="FileControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VideoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

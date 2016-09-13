@@ -16,29 +16,8 @@
         public MainWindow()
         {
             this.InitializeComponent();
-            this.vm = new Vm(this.MediaElement);
+            this.vm = new Vm();
             this.DataContext = this.vm;
-        }
-
-        private static int Multiplier()
-        {
-            var multiplier = 1;
-            if (Keyboard.Modifiers == ModifierKeys.Control)
-            {
-                multiplier = 10;
-            }
-
-            if (Keyboard.Modifiers == ModifierKeys.Shift)
-            {
-                multiplier = 100;
-            }
-
-            if (Keyboard.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
-            {
-                multiplier = 1000;
-            }
-
-            return multiplier;
         }
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -47,41 +26,13 @@
             this.vm.SelectedBookmarks = selected;
             if (this.Bookmarks.SelectedItems.Count == 1)
             {
-                this.vm.Seek(((Bookmark)this.Bookmarks.SelectedItems[0]).Time);
-            }
-        }
-
-        private void VideoWheel(object sender, MouseWheelEventArgs e)
-        {
-            this.vm.Step(Multiplier() * Math.Sign(e.Delta));
-        }
-
-        private void VideoKey(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Space)
-            {
-                this.vm.TogglePlayPause();
-            }
-
-            var multiplier = Multiplier();
-            if (e.Key == Key.Left)
-            {
-                this.vm.CurrentFrame -= multiplier;
-            }
-            else if (e.Key == Key.Right)
-            {
-                this.vm.CurrentFrame += multiplier;
+                this.VideoView.Seek(((Bookmark)this.Bookmarks.SelectedItems[0]).Time);
             }
         }
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             this.Focus();
-        }
-
-        private void OnMediaFailed(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
-        {
-            MessageBox.Show(this, exceptionRoutedEventArgs.ErrorException.Message, "Media failed");
         }
 
         private void OnDrop(object sender, DragEventArgs e)
@@ -113,12 +64,11 @@
 
         private void OnSaveBookmarkExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            this.vm.AddBookmark(new Bookmark { Time = this.vm.CurrentTime });
-        }
-
-        private void OnTogglePlayPauseExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            this.vm.TogglePlayPause();
+            var time = this.VideoView.CurrentTime;
+            if (time != null)
+            {
+                this.vm.AddBookmark(new Bookmark { Time = time.Value });
+            }
         }
 
         private void OnHelpExecuted(object sender, ExecutedRoutedEventArgs e)

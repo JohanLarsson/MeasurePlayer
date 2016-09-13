@@ -4,14 +4,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="Header" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+    </UserControl.Resources>
     <StackPanel>
+        <TextBlock Style="{StaticResource Header}" Text="Open file" />
         <TextBlock Text="Open a file by dragging it onto the player." />
+        <TextBlock Style="{StaticResource Header}" Text="Playback" />
         <TextBlock Text="Toggle play/pause by pressing space." />
-        <TextBlock Text="Record a bookmark by doubleclicking on the player." />
         <TextBlock Text="Move forward by rolling the mouse wheel. Modifiers" />
         <TextBlock Text="* None moves one frame at the time" />
         <TextBlock Text="* Ctrl moves ten frame at the time" />
         <TextBlock Text="* Shift moves 100 frames at the time" />
         <TextBlock Text="* Ctrl + Shift moves 1000 frames at the time" />
+        <TextBlock Text="Selecting a bookmark moves video to bookmark position" />
+        <TextBlock Style="{StaticResource Header}" Text="Bookmark" />
+        <TextBlock Text="Record a bookmark by doubleclicking on the player." />
+        <TextBlock Text="Selecting two bookmarks shows the time diff." />
     </StackPanel>
 </UserControl>

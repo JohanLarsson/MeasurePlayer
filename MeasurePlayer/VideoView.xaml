@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="MeasurePlayer.VideoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             KeyDown="OnKeyDown"
+             MouseWheel="OnMouseWheel"
+             mc:Ignorable="d">
+    <Grid>
+        <MediaElement x:Name="MediaElement"
+                      Grid.RowSpan="2"
+                      LoadedBehavior="Pause"
+                      MediaFailed="OnMediaFailed"
+                      ScrubbingEnabled="True"
+                      UnloadedBehavior="Close">
+            <MediaElement.CommandBindings>
+                <CommandBinding Command="MediaCommands.TogglePlayPause" Executed="OnTogglePlayPauseExecuted" />
+            </MediaElement.CommandBindings>
+        </MediaElement>
+
+        <Grid Grid.Row="0"
+              Grid.Column="0"
+              VerticalAlignment="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ToggleButton Grid.Row="0"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Bottom"
+                          HorizontalContentAlignment="Center"
+                          Command="{Binding TogglePlayPauseCommand}"
+                          Style="{StaticResource PlayPauseButton}" />
+            <StackPanel Grid.Row="0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Orientation="Horizontal">
+                <TextBlock Text="{Binding CurrentTime}" />
+                <TextBlock Text="{Binding TotalTime, StringFormat='/({0}) '}" />
+            </StackPanel>
+            <Slider Grid.Row="1"
+                    Maximum="{Binding TotalFrames}"
+                    Minimum="0"
+                    PreviewKeyDown="OnKeyDown"
+                    Value="{Binding CurrentFrame}" />
+
+        </Grid>
+    </Grid>
+</UserControl>
