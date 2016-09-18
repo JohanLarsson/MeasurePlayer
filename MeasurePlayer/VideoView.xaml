@@ -7,57 +7,8 @@
              xmlns:media="https://github.com/JohanLarsson/Gu.Wpf.Media"
              d:DesignHeight="300"
              d:DesignWidth="300"
-             KeyDown="OnKeyDown"
-             MouseWheel="OnMouseWheel"
              mc:Ignorable="d">
     <UserControl.InputBindings>
-        <KeyBinding Key="Space"
-                    Command="TogglePlayPause"
-                    CommandTarget="{Binding ElementName=MediaElement}" />
+
     </UserControl.InputBindings>
-    <Grid>
-        <media:MediaElementWrapper x:Name="MediaElement"
-                                   MediaFailed="OnMediaFailed"
-                                   ScrubbingEnabled="True"
-                                   Source="{Binding RelativeSource={RelativeSource FindAncestor,
-                                                                                   AncestorType={x:Type measurePlayer:VideoView}},
-                                                    Path=Source}" />
-
-        <Grid Grid.Row="0"
-              Grid.Column="0"
-              VerticalAlignment="Bottom">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <ToggleButton Grid.Row="0"
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Bottom"
-                          HorizontalContentAlignment="Center"
-                          Command="MediaCommands.TogglePlayPause"
-                          CommandTarget="{Binding ElementName=MediaElement}"
-                          Style="{StaticResource PlayPauseButton}" />
-            <TextBlock Grid.Row="0"
-                       HorizontalAlignment="Right"
-                       VerticalAlignment="Bottom">
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0}/{1}">
-                        <Binding ElementName="MediaElement" Path="Position" />
-                        <Binding ElementName="MediaElement" Path="Length" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
-
-            <Slider Grid.Row="1"
-                    Maximum="{Binding ElementName=MediaElement,
-                                      Path=Length,
-                                      Converter={x:Static measurePlayer:TimeSpanToSecondsConverter.Default}}"
-                    Minimum="0"
-                    Value="{Binding ElementName=MediaElement,
-                                    Path=Position,
-                                    Converter={x:Static measurePlayer:TimeSpanToSecondsConverter.Default}}" />
-
-        </Grid>
-    </Grid>
 </UserControl>

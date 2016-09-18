@@ -6,7 +6,7 @@
     {
         public HelpView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

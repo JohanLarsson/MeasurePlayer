@@ -53,18 +53,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Bookmark.cs" />
-    <Compile Include="BookmarksFile.cs" />
-    <Compile Include="Framerate.cs" />
+    <Compile Include="BookmarksViewModel.cs" />
+    <Compile Include="Model\Bookmark.cs" />
+    <Compile Include="Model\BookmarksFile.cs" />
+    <Compile Include="Model\Framerate.cs" />
     <Compile Include="HelpView.xaml.cs">
       <DependentUpon>HelpView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimeSpanToSecondsConverter.cs" />
-    <Compile Include="VideoInfo.cs" />
+    <Compile Include="MainViewModel.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\BoolToStretchConverter.cs" />
+    <Compile Include="Wpf\Selected.cs" />
+    <Compile Include="Wpf\TimeSpanToSecondsConverter.cs" />
+    <Compile Include="Model\VideoInfo.cs" />
     <Compile Include="VideoView.xaml.cs">
       <DependentUpon>VideoView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Vm.cs" />
     <Page Include="HelpView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -77,7 +82,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RelayCommand.cs" />
+    <Compile Include="Wpf\RelayCommand.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -133,7 +138,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
       <ItemGroup>
         <Reference Include="Gu.Wpf.Media">
-          <HintPath>..\packages\Gu.Wpf.Media\lib\net40\Gu.Wpf.Media.dll</HintPath>
+          <HintPath>..\packages\Gu.Wpf.Media\lib\net45\Gu.Wpf.Media.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

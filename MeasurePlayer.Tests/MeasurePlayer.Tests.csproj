@@ -45,10 +45,17 @@
     </When>
   </Choose>
   <ItemGroup>
+    <Compile Include="FrameRateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="paket.references" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MeasurePlayer\MeasurePlayer.csproj">
+      <Project>{B0E25CF4-E7D5-494D-85AE-461950F60E7E}</Project>
+      <Name>MeasurePlayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

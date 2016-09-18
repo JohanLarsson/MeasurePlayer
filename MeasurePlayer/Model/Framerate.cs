@@ -23,36 +23,14 @@
             return TimeSpan.FromSeconds(left / right.FramesPerSecond);
         }
 
-        public static TimeSpan? operator /(int left, FrameRate? right)
+        public static double operator *(FrameRate left, TimeSpan right)
         {
-            // ReSharper disable once UseNullPropagation
-            if (right == null)
-            {
-                return null;
-            }
-
-            return left / right.Value;
+            return left.FramesPerSecond * right.TotalSeconds;
         }
 
-        public static TimeSpan? operator /(ulong? left, FrameRate? right)
+        public static double operator *(TimeSpan left, FrameRate right)
         {
-            if (left == null || right == null)
-            {
-                return null;
-            }
-
-            return left.Value / right.Value;
-        }
-
-        public static double? operator *(FrameRate? left, TimeSpan right)
-        {
-            // ReSharper disable once UseNullPropagation
-            if (left == null)
-            {
-                return null;
-            }
-
-            return left.Value.FramesPerSecond * right.TotalSeconds;
+            return right * left;
         }
 
         public static FrameRate? Create(uint? frameRateValue)
