@@ -1,6 +1,7 @@
 ﻿namespace MeasurePlayer
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
     using System.Xml.Serialization;
@@ -8,6 +9,8 @@
 
     public class Bookmark : INotifyPropertyChanged
     {
+        public static readonly IEqualityComparer<Bookmark> NameTimeComparer = new NameTimeEqualityComparer();
+
         private string name;
         private TimeSpan time;
 
@@ -73,6 +76,42 @@
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private sealed class NameTimeEqualityComparer : IEqualityComparer<Bookmark>
+        {
+            public bool Equals(Bookmark x, Bookmark y)
+            {
+                if (ReferenceEquals(x, y))
+                {
+                    return true;
+                }
+
+                if (ReferenceEquals(x, null))
+                {
+                    return false;
+                }
+
+                if (ReferenceEquals(y, null))
+                {
+                    return false;
+                }
+
+                if (x.GetType() != y.GetType())
+                {
+                    return false;
+                }
+
+                return string.Equals(x.name, y.name) && x.time.Equals(y.time);
+            }
+
+            public int GetHashCode(Bookmark obj)
+            {
+                unchecked
+                {
+                    return ((obj.name?.GetHashCode() ?? 0) * 397) ^ obj.time.GetHashCode();
+                }
+            }
         }
     }
 }

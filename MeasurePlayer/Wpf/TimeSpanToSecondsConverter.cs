@@ -8,7 +8,6 @@
     {
         public static readonly TimeSpanToSecondsConverter Default = new TimeSpanToSecondsConverter();
 
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)

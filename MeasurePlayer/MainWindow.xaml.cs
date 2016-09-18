@@ -1,37 +1,24 @@
 ﻿namespace MeasurePlayer
 {
-    using System.Linq;
+    using System;
     using System.Windows;
-    using System.Windows.Controls;
     using System.Windows.Input;
+
+    using Gu.Wpf.Media;
+
+    using Microsoft.Win32;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly Vm vm;
+        private readonly MainViewModel vm = new MainViewModel();
 
         public MainWindow()
         {
             this.InitializeComponent();
-            this.vm = new Vm();
             this.DataContext = this.vm;
-        }
-
-        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var selected = this.Bookmarks.SelectedItems.Cast<Bookmark>().ToList();
-            this.vm.SelectedBookmarks = selected;
-            if (this.Bookmarks.SelectedItems.Count == 1)
-            {
-                this.VideoView.MediaElement.Position = ((Bookmark)this.Bookmarks.SelectedItems[0]).Time;
-            }
-        }
-
-        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            this.Focus();
         }
 
         private void OnDrop(object sender, DragEventArgs e)
@@ -39,8 +26,36 @@
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                this.VideoView.Source = files[0];
-                this.vm.Path = files[0];
+                if (files == null)
+                {
+                    return;
+                }
+
+                if (files.Length > 1)
+                {
+                    MessageBox.Show(
+                        this,
+                        "Only onde file at the time can be dropped.",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+
+                    return;
+                }
+
+                try
+                {
+                    this.vm.Source = new Uri(files[0], UriKind.Absolute);
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(
+                        this,
+                        exception.Message,
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
             }
         }
 
@@ -48,31 +63,55 @@
         {
             if (this.WindowStyle == WindowStyle.SingleBorderWindow)
             {
-                this.BookmarksExpander.Visibility = Visibility.Collapsed;
+                this.vm.IsFullScreen = true;
+                this.SizeToContent = SizeToContent.Manual;
                 this.WindowStyle = WindowStyle.None;
                 this.WindowState = WindowState.Maximized;
             }
             else
             {
-                this.BookmarksExpander.Visibility = Visibility.Visible;
-                this.WindowStyle = WindowStyle.SingleBorderWindow;
-                this.WindowState = WindowState.Normal;
+                this.OnEndFullScreenExecuted(sender,e);
             }
+
+            e.Handled = true;
         }
 
-        private void OnSaveBookmarkExecuted(object sender, ExecutedRoutedEventArgs e)
+        private void OnEndFullScreenCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            var time = this.VideoView.MediaElement.Position;
-            if (time != null)
-            {
-                this.vm.AddBookmark(new Bookmark { Time = time.Value });
-            }
+            e.CanExecute = this.WindowState == WindowState.Maximized && this.WindowStyle == WindowStyle.None;
+        }
+
+        private void OnEndFullScreenExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.vm.IsFullScreen = false;
+            this.WindowStyle = WindowStyle.SingleBorderWindow;
+            this.SizeToContent = SizeToContent.WidthAndHeight;
+            this.WindowState = WindowState.Normal;
+            e.Handled = true;
+        }
+
+        private void OnMediaFailed(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
+        {
+            MessageBox.Show(exceptionRoutedEventArgs.ErrorException.Message, "Media failed", MessageBoxButton.OK);
         }
 
         private void OnHelpExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var window = new Window { Content = new HelpView(), SizeToContent = SizeToContent.WidthAndHeight };
             window.ShowDialog();
+        }
+
+        private void OnOpenExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = $"Media files|{this.MediaElement.VideoFormats}|All files (*.*)|*.*"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                this.vm.Source = new Uri(openFileDialog.FileName, UriKind.Absolute);
+            }
         }
     }
 }

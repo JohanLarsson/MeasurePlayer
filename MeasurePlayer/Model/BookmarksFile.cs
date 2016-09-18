@@ -18,9 +18,9 @@
         // ReSharper disable once MemberCanBePrivate.Global Only used for serialization
         public List<Bookmark> Bookmarks { get; set; }
 
-        public static void AskBeforeSaveBookmarks(string videoFullFileName, IEnumerable<Bookmark> bookmarks)
+        public static void AskBeforeSaveBookmarks(string bookmarksFile, IEnumerable<Bookmark> bookmarks)
         {
-            if (string.IsNullOrEmpty(videoFullFileName))
+            if (bookmarksFile == null)
             {
                 return;
             }
@@ -33,13 +33,13 @@
 
             if (result == MessageBoxResult.Yes)
             {
-                Save(BookmarksFile.GetBookmarksFileName(videoFullFileName), bookmarks);
+                Save(bookmarksFile, bookmarks);
             }
         }
 
         public static string GetBookmarksFileName(string fileName)
         {
-            return System.IO.Path.ChangeExtension(fileName, null) + ".bookmarks.xml";
+            return Path.ChangeExtension(fileName, null) + ".bookmarks.xml";
         }
 
         public static void Save(string fileName, IEnumerable<Bookmark> bookmarks)
