@@ -4,7 +4,7 @@ using System.Windows;
 [assembly: AssemblyTitle("MeasurePlayer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Johan Larsson")]
 [assembly: AssemblyProduct("MeasurePlayer")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
