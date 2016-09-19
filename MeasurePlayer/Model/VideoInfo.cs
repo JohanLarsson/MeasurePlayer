@@ -14,6 +14,8 @@
 
         public FrameRate? FrameRate { get; }
 
+        public TimeSpan FrameDuration => FrameRate?.FrameDuration ?? TimeSpan.FromMilliseconds(100);
+
         public TimeSpan? Duration { get; }
 
         public uint? GetFrameAt(TimeSpan time)
