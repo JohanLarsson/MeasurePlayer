@@ -4,8 +4,6 @@
     using System.Windows;
     using System.Windows.Input;
 
-    using Gu.Wpf.Media;
-
     using Microsoft.Win32;
 
     /// <summary>
@@ -45,7 +43,7 @@
 
                 try
                 {
-                    this.vm.Source = new Uri(files[0], UriKind.Absolute);
+                    this.vm.MediaFileName = files[0];
                 }
                 catch (Exception exception)
                 {
@@ -70,7 +68,7 @@
             }
             else
             {
-                this.OnEndFullScreenExecuted(sender,e);
+                this.OnEndFullScreenExecuted(sender, e);
             }
 
             e.Handled = true;
@@ -110,7 +108,7 @@
 
             if (openFileDialog.ShowDialog() == true)
             {
-                this.vm.Source = new Uri(openFileDialog.FileName, UriKind.Absolute);
+                this.vm.MediaFileName = openFileDialog.FileName;
             }
         }
     }
