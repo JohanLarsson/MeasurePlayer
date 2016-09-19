@@ -12,9 +12,11 @@
             this.Duration = CreateDuration(shellFile.Properties.System.Media.Duration.Value);
         }
 
+        public static TimeSpan DefaultDuration { get; } = TimeSpan.FromMilliseconds(1/25.0);
+ 
         public FrameRate? FrameRate { get; }
 
-        public TimeSpan FrameDuration => FrameRate?.FrameDuration ?? TimeSpan.FromMilliseconds(100);
+        public TimeSpan FrameDuration => this.FrameRate?.FrameDuration ?? DefaultDuration;
 
         public TimeSpan? Duration { get; }
 

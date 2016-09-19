@@ -64,6 +64,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\BoolToStretchConverter.cs" />
+    <Compile Include="Wpf\BoolToVisibilityConverter.cs" />
     <Compile Include="Wpf\CompositeCollectionConverter.cs" />
     <Compile Include="Wpf\NullToBoolCOnverter.cs" />
     <Compile Include="Wpf\Selected.cs" />
