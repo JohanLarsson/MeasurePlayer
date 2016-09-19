@@ -6,7 +6,7 @@
 
     public class VideoInfo
     {
-        public VideoInfo(ShellFile shellFile)
+        private VideoInfo(ShellFile shellFile)
         {
             this.FrameRate = MeasurePlayer.FrameRate.Create(shellFile.Properties.System.Video.FrameRate.Value);
             this.Duration = CreateDuration(shellFile.Properties.System.Media.Duration.Value);
@@ -19,6 +19,16 @@
         public TimeSpan FrameDuration => this.FrameRate?.FrameDuration ?? DefaultDuration;
 
         public TimeSpan? Duration { get; }
+
+        public static VideoInfo CreateOrDefault(string mediaFileName)
+        {
+            if (string.IsNullOrEmpty(mediaFileName))
+            {
+                return null;
+            }
+
+            return new VideoInfo(ShellFile.FromFilePath(mediaFileName));
+        }
 
         public uint? GetFrameAt(TimeSpan time)
         {

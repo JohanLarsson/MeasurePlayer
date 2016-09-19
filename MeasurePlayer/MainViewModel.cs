@@ -9,17 +9,16 @@
 
     using JetBrains.Annotations;
 
-    using Microsoft.WindowsAPICodePack.Shell;
-
     public class MainViewModel : INotifyPropertyChanged
     {
-        private Uri source;
         private bool isFullScreen;
         private TimeSpan? position;
         private VideoInfo info;
         private TimeSpan? diff;
 
         private Bookmark selectedBookmark;
+
+        private string mediaFileName;
 
         public MainViewModel()
         {
@@ -29,7 +28,8 @@
                                 ? (TimeSpan?)null
                                 : this.SelectedBookmarks.Max(x => x.Time) - this.SelectedBookmarks.Min(x => x.Time);
             };
-            this.AddBookmarkCommand = new RelayCommand(_ => this.AddBookmarkAtCurrentTime(), _ => this.source != null);
+
+            this.AddBookmarkCommand = new RelayCommand(_ => this.AddBookmarkAtCurrentTime(), _ => this.mediaFileName != null);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -83,32 +83,23 @@
             }
         }
 
-        public Uri Source
+        public string MediaFileName
         {
             get
             {
-                return this.source;
+                return this.mediaFileName;
             }
 
             set
             {
-                if (Equals(value, this.source))
+                if (value == this.mediaFileName)
                 {
                     return;
                 }
 
-                this.source = value;
-                if (this.source == null)
-                {
-                    this.Info = null;
-                    this.BookMarks.Update(null);
-                }
-                else
-                {
-                    this.Info = new VideoInfo(ShellFile.FromFilePath(this.source.LocalPath));
-                    this.BookMarks.Update(BookmarksFile.GetBookmarksFileName(this.source.LocalPath));
-                }
-
+                this.mediaFileName = value;
+                this.Info = VideoInfo.CreateOrDefault(this.mediaFileName);
+                this.BookMarks.Update(BookmarksFile.GetBookmarksFileName(this.mediaFileName));
                 this.OnPropertyChanged();
             }
         }

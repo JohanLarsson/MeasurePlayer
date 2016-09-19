@@ -2,9 +2,6 @@
 {
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-
-    using JetBrains.Annotations;
 
     public class BookmarksViewModel : INotifyPropertyChanged
     {
@@ -65,12 +62,6 @@
             {
                 BookmarksFile.Save(this.bookmarksFile, this.Bookmarks);
             }
-        }
-
-        [NotifyPropertyChangedInvocator]
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
