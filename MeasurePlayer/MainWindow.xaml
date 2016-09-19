@@ -6,12 +6,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:media="https://github.com/JohanLarsson/Gu.Wpf.Media"
         Title="MainWindow"
-        Width="525"
-        Height="350"
+        MinWidth="525"
+        MinHeight="350"
         d:DataContext="{d:DesignInstance local:MainViewModel}"
         AllowDrop="True"
         Background="Black"
         Drop="OnDrop"
+        SizeToContent="WidthAndHeight"
         mc:Ignorable="d">
     <Window.Style>
         <Style TargetType="{x:Type Window}">
@@ -155,7 +156,8 @@
                                    Position="{Binding Position,
                                                       Mode=TwoWay}"
                                    ScrubbingEnabled="True"
-                                   SkipIncrement="{Binding Info.FrameDuration}"
+                                   SkipIncrement="{Binding Info.FrameDuration,
+                                                           FallbackValue={x:Static local:VideoInfo.DefaultDuration}}"
                                    Source="{Binding Source,
                                                     Mode=OneWay}"
                                    Stretch="{Binding IsFullScreen,
@@ -174,14 +176,13 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <DataGrid x:Name="Bookmarks"
-                      local:Selected.Items="{Binding BookMarks.SelectedBookmarks}"
+                      local:Selected.Items="{Binding SelectedBookmarks}"
+                      SelectedItem="{Binding SelectedBookmark}"
                       AutoGenerateColumns="False"
                       Background="Transparent"
                       BorderBrush="{x:Null}"
                       BorderThickness="0"
                       CanUserAddRows="False"
-                      SelectionMode="Extended"
-                      SelectionUnit="FullRow"
                       Foreground="{Binding ElementName=ToggleMutedButton,
                                            Path=Foreground}"
                       GridLinesVisibility="Horizontal"
@@ -190,7 +191,9 @@
                                                          Path=Foreground}"
                       ItemsSource="{Binding BookMarks.Bookmarks,
                                             Mode=OneTime}"
-                      RowBackground="Transparent">
+                      RowBackground="Transparent"
+                      SelectionMode="Extended"
+                      SelectionUnit="FullRow">
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="{x:Type DataGridColumnHeader}">
                         <Setter Property="Background" Value="Transparent" />
@@ -206,21 +209,25 @@
                     <DataGridTextColumn Binding="{Binding Time, Converter={x:Static media:TimeSpanToStringConverter.Default}, ConverterParameter=fff}" Header="Time" />
                 </DataGrid.Columns>
             </DataGrid>
-            <Grid Grid.Row="1" IsEnabled="{Binding BookMarks.Diff, Converter={local:NullToBoolConverter WhenNull=False}}">
+            <Grid Grid.Row="1"
+                  IsEnabled="{Binding Diff,
+                                      Converter={local:NullToBoolConverter WhenNull=False}}"
+                  Visibility="{Binding RelativeSource={RelativeSource Self},
+                                       Path=IsEnabled,
+                                       Converter={x:Static local:BoolToVisibilityConverter.Default}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <TextBox Width="{Binding ElementName=NameColumn,
                                          Path=ActualWidth}"
-                         Background="Transparent"
+                         IsReadOnly="True"
                          Padding="2,0"
                          Text="Diff:" />
                 <TextBox Grid.Column="1"
-                         Background="Transparent"
                          IsReadOnly="True"
                          Padding="2,0"
-                         Text="{Binding BookMarks.Diff,
+                         Text="{Binding Diff,
                                         Converter={x:Static media:TimeSpanToStringConverter.Default},
                                         ConverterParameter=fff}" />
             </Grid>
