@@ -13,6 +13,8 @@
 
         public double FramesPerSecond => this.FrameRateValue / 1000.0;
 
+        public TimeSpan FrameDuration => TimeSpan.FromSeconds(1 / this.FramesPerSecond);
+
         public static TimeSpan operator /(int left, FrameRate right)
         {
             return TimeSpan.FromSeconds(left / right.FramesPerSecond);
