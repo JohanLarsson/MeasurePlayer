@@ -1,6 +1,6 @@
 # Install
 1. Download [binaries](https://github.com/JohanLarsson/MeasurePlayer/files/480821/MeasurePlayer.1.0.0.zip).
-2. Extract to Program Files/MeasurePlayer (requres admin)
+2. Extract to Program Files/MeasurePlayer (requires administrator priviliges)
 3. Run MeasurePlayer.exe
 
 # Open file
