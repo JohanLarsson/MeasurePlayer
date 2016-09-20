@@ -19,4 +19,4 @@
 
 # Bookmark
 * Record a bookmark by doubleclicking on the player.
-* Selecting two or more bookmarks shows the maximum time difference.
+* Selecting two or more bookmarks shows the time difference.
