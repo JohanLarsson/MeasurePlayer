@@ -1,7 +1,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/oa7meym282bo0wsg/branch/master?svg=true)](https://ci.appveyor.com/project/JohanLarsson/measureplayer/branch/master)
 
 # Install
-1. Download [MeasurePlayer.1.0.1.zip](https://github.com/JohanLarsson/MeasurePlayer/files/481022/MeasurePlayer.1.0.1.zip).
+1. Download [MeasurePlayer.1.0.2.zip](https://github.com/JohanLarsson/MeasurePlayer/files/490252/MeasurePlayer.1.0.2.zip).
 2. Extract to Program Files/MeasurePlayer (requires administrator priviliges)
 3. Run MeasurePlayer.exe
 
