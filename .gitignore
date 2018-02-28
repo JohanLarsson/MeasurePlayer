@@ -30,3 +30,4 @@ $tf*/
 *.psess
 *.vsp
 packages/*
+/.vs/*
