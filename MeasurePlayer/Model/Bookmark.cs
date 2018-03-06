@@ -1,4 +1,4 @@
-﻿namespace MeasurePlayer
+namespace MeasurePlayer
 {
     using System;
     using System.Collections.Generic;
@@ -18,10 +18,7 @@
 
         public string Name
         {
-            get
-            {
-                return this.name;
-            }
+            get => this.name;
 
             set
             {
@@ -38,10 +35,7 @@
         [XmlIgnore]
         public TimeSpan Time
         {
-            get
-            {
-                return this.time;
-            }
+            get => this.time;
 
             set
             {
@@ -52,6 +46,7 @@
 
                 this.time = value;
                 this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.Ticks));
             }
         }
 
@@ -61,14 +56,13 @@
         [EditorBrowsable(EditorBrowsableState.Never)]
         public long Ticks
         {
-            get
-            {
-                return this.time.Ticks;
-            }
+            get => this.time.Ticks;
 
             set
             {
                 this.time = new TimeSpan(value);
+                this.OnPropertyChanged(nameof(this.Time));
+                this.OnPropertyChanged();
             }
         }
 
@@ -87,12 +81,7 @@
                     return true;
                 }
 
-                if (ReferenceEquals(x, null))
-                {
-                    return false;
-                }
-
-                if (ReferenceEquals(y, null))
+                if (x is null || y is null)
                 {
                     return false;
                 }

@@ -1,1 +1,11 @@
-Nunit
+group Analyzers
+  AsyncUsageAnalyzers
+  IDisposableAnalyzers
+  PropertyChangedAnalyzers
+  StyleCop.Analyzers
+  WpfAnalyzers
+  Gu.Analyzers
+  JetBrains.Annotations
+
+group Test
+  Nunit

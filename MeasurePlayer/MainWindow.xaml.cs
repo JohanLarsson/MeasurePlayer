@@ -1,4 +1,4 @@
-﻿namespace MeasurePlayer
+namespace MeasurePlayer
 {
     using System;
     using System.Windows;
@@ -62,9 +62,9 @@
             if (this.WindowStyle == WindowStyle.SingleBorderWindow)
             {
                 this.vm.IsFullScreen = true;
-                this.SizeToContent = SizeToContent.Manual;
-                this.WindowStyle = WindowStyle.None;
-                this.WindowState = WindowState.Maximized;
+                this.SetCurrentValue(SizeToContentProperty, SizeToContent.Manual);
+                this.SetCurrentValue(WindowStyleProperty, WindowStyle.None);
+                this.SetCurrentValue(WindowStateProperty, WindowState.Maximized);
             }
             else
             {
@@ -82,9 +82,9 @@
         private void OnEndFullScreenExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             this.vm.IsFullScreen = false;
-            this.WindowStyle = WindowStyle.SingleBorderWindow;
-            this.SizeToContent = SizeToContent.WidthAndHeight;
-            this.WindowState = WindowState.Normal;
+            this.SetCurrentValue(WindowStyleProperty, WindowStyle.SingleBorderWindow);
+            this.SetCurrentValue(SizeToContentProperty, SizeToContent.WidthAndHeight);
+            this.SetCurrentValue(WindowStateProperty, WindowState.Normal);
             e.Handled = true;
         }
 

@@ -3,6 +3,17 @@ framework: >= net45
 
 nuget Gu.Wpf.Media
 nuget Windows7APICodePack-Shell
-nuget JetBrains.Annotations 
-nuget StyleCop.Analyzers 
-nuget NUnit
+
+group Analyzers
+  source http://nuget.org/api/v2
+  nuget AsyncUsageAnalyzers
+  nuget IDisposableAnalyzers
+  nuget PropertyChangedAnalyzers
+  nuget StyleCop.Analyzers
+  nuget WpfAnalyzers
+  nuget Gu.Analyzers
+  nuget JetBrains.Annotations
+
+group Test
+  source http://nuget.org/api/v2
+  nuget NUnit
