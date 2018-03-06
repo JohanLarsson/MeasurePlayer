@@ -1,4 +1,4 @@
-﻿namespace MeasurePlayer
+namespace MeasurePlayer
 {
     using System;
 
@@ -6,10 +6,13 @@
 
     public class VideoInfo
     {
-        private VideoInfo(ShellFile shellFile)
+        private VideoInfo(string filename)
         {
-            this.FrameRate = MeasurePlayer.FrameRate.Create(shellFile.Properties.System.Video.FrameRate.Value);
-            this.Duration = CreateDuration(shellFile.Properties.System.Media.Duration.Value);
+            using (var shellFile = ShellFile.FromFilePath(filename))
+            {
+                this.FrameRate = MeasurePlayer.FrameRate.Create(shellFile.Properties.System.Video.FrameRate.Value);
+                this.Duration = CreateDuration(shellFile.Properties.System.Media.Duration.Value);
+            }
         }
 
         public static TimeSpan DefaultDuration { get; } = TimeSpan.FromMilliseconds(1 / 25.0);
@@ -27,7 +30,7 @@
                 return null;
             }
 
-            return new VideoInfo(ShellFile.FromFilePath(mediaFileName));
+            return new VideoInfo(mediaFileName);
         }
 
         public uint? GetFrameAt(TimeSpan time)
