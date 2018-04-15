@@ -1,4 +1,4 @@
-﻿namespace MeasurePlayer
+namespace MeasurePlayer
 {
     using System.Collections.Generic;
     using System.IO;
@@ -6,6 +6,7 @@
     using System.Windows;
     using System.Xml.Serialization;
 
+#pragma warning disable INPC001 // Implement INotifyPropertyChanged.
     public class BookmarksFile
     {
         private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(BookmarksFile));

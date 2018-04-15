@@ -1,9 +1,9 @@
-﻿namespace MeasurePlayer
+namespace MeasurePlayer
 {
     using System.Collections.ObjectModel;
     using System.ComponentModel;
 
-    public class BookmarksViewModel : INotifyPropertyChanged
+    public sealed class BookmarksViewModel : INotifyPropertyChanged
     {
         private string bookmarksFile;
 
