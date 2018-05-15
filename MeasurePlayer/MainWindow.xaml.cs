@@ -33,7 +33,7 @@ namespace MeasurePlayer
                 {
                     MessageBox.Show(
                         this,
-                        "Only onde file at the time can be dropped.",
+                        "Only one file at the time can be dropped.",
                         "Error",
                         MessageBoxButton.OK,
                         MessageBoxImage.Error);
