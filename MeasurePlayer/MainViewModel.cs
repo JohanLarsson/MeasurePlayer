@@ -1,4 +1,4 @@
-﻿namespace MeasurePlayer
+namespace MeasurePlayer
 {
     using System;
     using System.Collections.ObjectModel;
@@ -6,8 +6,6 @@
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Windows.Input;
-
-    using JetBrains.Annotations;
 
     public class MainViewModel : INotifyPropertyChanged
     {
@@ -161,7 +159,6 @@
             }
         }
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

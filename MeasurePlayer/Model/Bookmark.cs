@@ -5,7 +5,6 @@ namespace MeasurePlayer
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
     using System.Xml.Serialization;
-    using JetBrains.Annotations;
 
     public class Bookmark : INotifyPropertyChanged
     {
@@ -66,7 +65,6 @@ namespace MeasurePlayer
             }
         }
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

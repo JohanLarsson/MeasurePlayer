@@ -1,18 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeasurePlayer", "MeasurePlayer\MeasurePlayer.csproj", "{B0E25CF4-E7D5-494D-85AE-461950F60E7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeasurePlayer.Tests", "MeasurePlayer.Tests\MeasurePlayer.Tests.csproj", "{62F6DF6F-4F3C-4FB2-80A7-B885624386C7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{1A10F25C-4BE8-47E0-8A8F-F39D90C3C3B8}"
-	ProjectSection(SolutionItems) = preProject
-		paket.dependencies = paket.dependencies
-		paket.lock = paket.lock
-		.paket\Readme.paket.md = .paket\Readme.paket.md
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeasurePlayer.Tests", "MeasurePlayer.Tests\MeasurePlayer.Tests.csproj", "{62F6DF6F-4F3C-4FB2-80A7-B885624386C7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{BD59CBBF-3258-4E73-A947-B8F02AD83589}"
 	ProjectSection(SolutionItems) = preProject
@@ -38,5 +31,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {640EC502-7C15-47AF-8628-090ECC800240}
 	EndGlobalSection
 EndGlobal
