@@ -2,6 +2,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <NUllable>enable</NUllable>
     <CodeAnalysisRuleSet>MeasurePlayer.Tests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 

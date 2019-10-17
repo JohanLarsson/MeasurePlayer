@@ -10,12 +10,12 @@ namespace MeasurePlayer
     {
         public static readonly IEqualityComparer<Bookmark> NameTimeComparer = new NameTimeEqualityComparer();
 
-        private string name;
+        private string? name;
         private TimeSpan time;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        public string Name
+        public string? Name
         {
             get => this.name;
 
@@ -65,7 +65,7 @@ namespace MeasurePlayer
             }
         }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

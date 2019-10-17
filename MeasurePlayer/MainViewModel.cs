@@ -11,12 +11,10 @@ namespace MeasurePlayer
     {
         private bool isFullScreen;
         private TimeSpan? position;
-        private VideoInfo info;
+        private VideoInfo? info;
         private TimeSpan? diff;
-
-        private Bookmark selectedBookmark;
-
-        private string mediaFileName;
+        private Bookmark? selectedBookmark;
+        private string? mediaFileName;
 
         public MainViewModel()
         {
@@ -30,7 +28,7 @@ namespace MeasurePlayer
             this.AddBookmarkCommand = new RelayCommand(_ => this.AddBookmarkAtCurrentTime(), _ => this.mediaFileName != null);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public ICommand AddBookmarkCommand { get; }
 
@@ -38,12 +36,9 @@ namespace MeasurePlayer
 
         public ObservableCollection<Bookmark> SelectedBookmarks { get; } = new ObservableCollection<Bookmark>();
 
-        public Bookmark SelectedBookmark
+        public Bookmark? SelectedBookmark
         {
-            get
-            {
-                return this.selectedBookmark;
-            }
+            get => this.selectedBookmark;
 
             set
             {
@@ -64,10 +59,7 @@ namespace MeasurePlayer
 
         public TimeSpan? Diff
         {
-            get
-            {
-                return this.diff;
-            }
+            get => this.diff;
 
             private set
             {
@@ -81,12 +73,9 @@ namespace MeasurePlayer
             }
         }
 
-        public string MediaFileName
+        public string? MediaFileName
         {
-            get
-            {
-                return this.mediaFileName;
-            }
+            get => this.mediaFileName;
 
             set
             {
@@ -102,12 +91,9 @@ namespace MeasurePlayer
             }
         }
 
-        public VideoInfo Info
+        public VideoInfo? Info
         {
-            get
-            {
-                return this.info;
-            }
+            get => this.info;
 
             private set
             {
@@ -123,10 +109,7 @@ namespace MeasurePlayer
 
         public bool IsFullScreen
         {
-            get
-            {
-                return this.isFullScreen;
-            }
+            get => this.isFullScreen;
 
             set
             {
@@ -142,10 +125,7 @@ namespace MeasurePlayer
 
         public TimeSpan? Position
         {
-            get
-            {
-                return this.position;
-            }
+            get => this.position;
 
             set
             {
@@ -159,7 +139,7 @@ namespace MeasurePlayer
             }
         }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

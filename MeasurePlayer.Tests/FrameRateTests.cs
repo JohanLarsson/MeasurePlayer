@@ -1,4 +1,4 @@
-﻿namespace MeasurePlayer.Tests
+namespace MeasurePlayer.Tests
 {
     using NUnit.Framework;
 
@@ -10,7 +10,7 @@
         {
             var frameRate = FrameRate.Create(framerateValue);
             Assert.NotNull(frameRate);
-            var time = frames / frameRate.Value;
+            var time = frames / frameRate!.Value;
             Assert.AreEqual(seconds, time.TotalSeconds);
             Assert.AreEqual(frames, time * frameRate.Value);
         }

@@ -38,7 +38,7 @@ namespace MeasurePlayer
             }
         }
 
-        public static string GetBookmarksFileName(string fileName)
+        public static string GetBookmarksFileName(string? fileName)
         {
             return Path.ChangeExtension(fileName, null) + ".bookmarks.xml";
         }

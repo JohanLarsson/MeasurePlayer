@@ -5,14 +5,14 @@ namespace MeasurePlayer
 
     public sealed class BookmarksViewModel : INotifyPropertyChanged
     {
-        private string bookmarksFile;
+        private string? bookmarksFile;
 
         public BookmarksViewModel()
         {
             this.Bookmarks.CollectionChanged += (_, __) => this.SaveBookmarks();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public ObservableCollection<Bookmark> Bookmarks { get; } = new ObservableCollection<Bookmark>();
 

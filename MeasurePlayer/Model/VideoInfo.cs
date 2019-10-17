@@ -23,7 +23,7 @@ namespace MeasurePlayer
 
         public TimeSpan? Duration { get; }
 
-        public static VideoInfo CreateOrDefault(string mediaFileName)
+        public static VideoInfo? CreateOrDefault(string? mediaFileName)
         {
             if (string.IsNullOrEmpty(mediaFileName))
             {
