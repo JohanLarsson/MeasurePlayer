@@ -6,9 +6,6 @@ namespace MeasurePlayer
 
     using Microsoft.Win32;
 
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private readonly MainViewModel vm = new MainViewModel();
@@ -31,7 +28,7 @@ namespace MeasurePlayer
 
                 if (files.Length > 1)
                 {
-                    MessageBox.Show(
+                    _ = MessageBox.Show(
                         this,
                         "Only one file at the time can be dropped.",
                         "Error",
@@ -47,7 +44,7 @@ namespace MeasurePlayer
                 }
                 catch (Exception exception)
                 {
-                    MessageBox.Show(
+                    _ = MessageBox.Show(
                         this,
                         exception.Message,
                         "Error",
@@ -90,20 +87,20 @@ namespace MeasurePlayer
 
         private void OnMediaFailed(object sender, ExceptionRoutedEventArgs exceptionRoutedEventArgs)
         {
-            MessageBox.Show(exceptionRoutedEventArgs.ErrorException.Message, "Media failed", MessageBoxButton.OK);
+            _ = MessageBox.Show(exceptionRoutedEventArgs.ErrorException.Message, "Media failed", MessageBoxButton.OK);
         }
 
         private void OnHelpExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var window = new Window { Content = new HelpView(), SizeToContent = SizeToContent.WidthAndHeight };
-            window.ShowDialog();
+            _ = window.ShowDialog();
         }
 
         private void OnOpenExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Filter = $"Media files|{this.MediaElement.VideoFormats}|All files (*.*)|*.*"
+                Filter = $"Media files|{this.MediaElement.VideoFormats}|All files (*.*)|*.*",
             };
 
             if (openFileDialog.ShowDialog() == true)
