@@ -1,11 +1,11 @@
-﻿namespace MeasurePlayer
+namespace MeasurePlayer
 {
     using System;
     using System.Collections;
     using System.Globalization;
     using System.Windows.Data;
 
-    public class CompositeCollectionConverter : IMultiValueConverter
+    public sealed class CompositeCollectionConverter : IMultiValueConverter
     {
         public static readonly CompositeCollectionConverter Default = new CompositeCollectionConverter();
 

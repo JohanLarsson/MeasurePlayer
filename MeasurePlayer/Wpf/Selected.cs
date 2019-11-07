@@ -1,4 +1,4 @@
-﻿namespace MeasurePlayer
+namespace MeasurePlayer
 {
     using System.Collections;
     using System.Windows;
@@ -18,11 +18,17 @@
             EventManager.RegisterClassHandler(typeof(Selector), Selector.SelectionChangedEvent, new SelectionChangedEventHandler(OnSelectionChanged));
         }
 
+        /// <summary>Helper for setting <see cref="ItemsProperty"/> on <paramref name="element"/>.</summary>
+        /// <param name="element"><see cref="Selector"/> to set <see cref="ItemsProperty"/> on.</param>
+        /// <param name="value">Items property value.</param>
         public static void SetItems(this Selector element, IList value)
         {
             element.SetValue(ItemsProperty, value);
         }
 
+        /// <summary>Helper for getting <see cref="ItemsProperty"/> from <paramref name="element"/>.</summary>
+        /// <param name="element"><see cref="Selector"/> to read <see cref="ItemsProperty"/> from.</param>
+        /// <returns>Items property value.</returns>
         [AttachedPropertyBrowsableForChildren(IncludeDescendants = false)]
         [AttachedPropertyBrowsableForType(typeof(Selector))]
         public static IList GetItems(this Selector element)

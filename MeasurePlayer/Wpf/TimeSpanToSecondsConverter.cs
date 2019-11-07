@@ -1,10 +1,11 @@
-﻿namespace MeasurePlayer
+namespace MeasurePlayer
 {
     using System;
     using System.Globalization;
     using System.Windows.Data;
 
-    public class TimeSpanToSecondsConverter : IValueConverter
+    [ValueConversion(typeof(TimeSpan), typeof(double))]
+    public sealed class TimeSpanToSecondsConverter : IValueConverter
     {
         public static readonly TimeSpanToSecondsConverter Default = new TimeSpanToSecondsConverter();
 

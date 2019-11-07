@@ -1,11 +1,12 @@
-﻿namespace MeasurePlayer
+namespace MeasurePlayer
 {
     using System;
     using System.Globalization;
     using System.Windows.Data;
     using System.Windows.Media;
 
-    public class BoolToStretchConverter : IValueConverter
+    [ValueConversion(typeof(bool), typeof(Stretch))]
+    public sealed class BoolToStretchConverter : IValueConverter
     {
         public static readonly BoolToStretchConverter Default = new BoolToStretchConverter();
 
@@ -18,7 +19,7 @@
 
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotSupportedException($"{this.GetType().Name} does not support use in bindings with Mode = TwoWay.");
+            throw new NotSupportedException($"{typeof(BoolToStretchConverter).Name} does not support use in bindings with Mode = TwoWay.");
         }
     }
 }
