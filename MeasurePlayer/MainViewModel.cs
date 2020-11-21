@@ -18,7 +18,7 @@ namespace MeasurePlayer
 
         public MainViewModel()
         {
-            this.SelectedBookmarks.CollectionChanged += (_, __) =>
+            this.SelectedBookmarks.CollectionChanged += (_, _) =>
             {
                 this.Diff = this.SelectedBookmarks.Count < 2
                                 ? (TimeSpan?)null

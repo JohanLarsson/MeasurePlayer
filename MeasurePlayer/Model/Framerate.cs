@@ -1,8 +1,8 @@
-﻿namespace MeasurePlayer
+namespace MeasurePlayer
 {
     using System;
 
-    public struct FrameRate
+    public readonly struct FrameRate
     {
         private FrameRate(uint frameRateValue)
         {

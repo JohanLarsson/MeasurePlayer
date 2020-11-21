@@ -9,7 +9,7 @@ namespace MeasurePlayer
 
         public BookmarksViewModel()
         {
-            this.Bookmarks.CollectionChanged += (_, __) => this.SaveBookmarks();
+            this.Bookmarks.CollectionChanged += (_, _) => this.SaveBookmarks();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
