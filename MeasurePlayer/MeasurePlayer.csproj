@@ -2,10 +2,8 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <UseWpf>true</UseWpf>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <NUllable>enable</NUllable>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <CodeAnalysisRuleSet>MeasurePlayer.ruleset</CodeAnalysisRuleSet>
+    <TargetFramework>net5.0-windows</TargetFramework>    
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>

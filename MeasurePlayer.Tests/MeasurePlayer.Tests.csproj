@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <NUllable>enable</NUllable>
-    <CodeAnalysisRuleSet>MeasurePlayer.Tests.ruleset</CodeAnalysisRuleSet>
+    <TargetFramework>net5.0-windows</TargetFramework>    
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
