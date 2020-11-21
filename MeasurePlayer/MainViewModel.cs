@@ -63,7 +63,7 @@ namespace MeasurePlayer
 
             private set
             {
-                if (value.Equals(this.diff))
+                if (value == this.diff)
                 {
                     return;
                 }
@@ -110,7 +110,6 @@ namespace MeasurePlayer
         public bool IsFullScreen
         {
             get => this.isFullScreen;
-
             set
             {
                 if (value == this.isFullScreen)
@@ -129,7 +128,7 @@ namespace MeasurePlayer
 
             set
             {
-                if (value.Equals(this.position))
+                if (value == this.position)
                 {
                     return;
                 }
