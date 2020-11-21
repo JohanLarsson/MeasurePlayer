@@ -52,10 +52,8 @@ namespace MeasurePlayer
             }
 
             var bookmarksFile = new BookmarksFile { Bookmarks = bookmarks.OrderBy(x => x.Time).ToList() };
-            using (var stream = new FileStream(fileName, FileMode.Create))
-            {
-                Serializer.Serialize(stream, bookmarksFile);
-            }
+            using var stream = new FileStream(fileName, FileMode.Create);
+            Serializer.Serialize(stream, bookmarksFile);
         }
 
         public static IReadOnlyList<Bookmark> Load(string fileName)
@@ -67,11 +65,9 @@ namespace MeasurePlayer
 
             try
             {
-                using (var stream = new FileStream(fileName, FileMode.Open))
-                {
-                    var file = (BookmarksFile)Serializer.Deserialize(stream);
-                    return file.Bookmarks;
-                }
+                using var stream = new FileStream(fileName, FileMode.Open);
+                var file = (BookmarksFile)Serializer.Deserialize(stream);
+                return file.Bookmarks;
             }
             catch (FileNotFoundException)
             {
